@@ -3,5 +3,6 @@ export enum CouponCategory  {
     FoodCoupons = 'Food Coupons',
     RetailCoupons = 'Retail Coupons',
     Beauty = 'Beauty',
-    Entertainment = 'Entertainment'
+    Entertainment = 'Entertainment',
+    Travel = 'Travel' 
 }

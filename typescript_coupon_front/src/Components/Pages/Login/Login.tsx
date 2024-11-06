@@ -30,8 +30,7 @@ const Login = () => {
       newErrors.password = "Password must be at least 8 characters long";
       isValid = false;
     }
-
-    setErrors(newErrors);
+     setErrors(newErrors);
     return isValid;
   };
 
@@ -60,9 +59,7 @@ const Login = () => {
         }}
       >
         {" "}
-        {}
         {successMessage && <p className="successLabel">{successMessage}</p>}
-        {}
         {errors.general && (
           <p className="errorLabel general">{errors.general}</p>
         )}

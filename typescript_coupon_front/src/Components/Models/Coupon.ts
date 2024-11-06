@@ -14,8 +14,8 @@ export class Coupon {
   code: string;
   createdByUserId: number;
   amount: number;
-  isStackable: boolean;
-  createdAt: Date;
+  isCombinable: boolean;
+  creationDate: Date;
 
   constructor(
     id: number,
@@ -31,8 +31,8 @@ export class Coupon {
     code: string,
     createdByUserId: number,
     amount: number,
-    isStackable: boolean,
-    createdAt: Date
+    isCombinable: boolean,
+    creationDate: Date
   ) {
     this.id = id;
     this.name = name;
@@ -47,14 +47,16 @@ export class Coupon {
     this.code = code;
     this.createdByUserId = createdByUserId;
     this.amount = amount;
-    this.isStackable = isStackable;
-    this.createdAt = createdAt;
+    this.isCombinable = isCombinable;
+    this.creationDate = creationDate;
   }
+
   calculateDiscountedPrice(): number {
     if (this.discountType === "Percentage" && this.discount) {
       return this.price - (this.price * this.discount) / 100;
     } else if (this.discountType === "Amount" && this.discount) {
       return this.price - this.discount;
-    }    return this.price;
+    }
+    return this.price;
   }
 }
