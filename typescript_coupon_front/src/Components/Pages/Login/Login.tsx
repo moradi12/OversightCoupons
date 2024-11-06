@@ -5,8 +5,12 @@ const Login = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [successMessage, setSuccessMessage] = useState(""); 
-  const [errors, setErrors] = useState({ email: "", password: "", general: "" });
+  const [successMessage, setSuccessMessage] = useState("");
+  const [errors, setErrors] = useState({
+    email: "",
+    password: "",
+    general: "",
+  });
 
   const validateInputs = (): boolean => {
     const newErrors = { email: "", password: "", general: "" };
@@ -34,11 +38,14 @@ const Login = () => {
   const handleLogin = () => {
     if (validateInputs()) {
       if (email === "admin@admin.com" && password === "admin12345") {
-        setSuccessMessage("Welcome back! Login successful."); 
-        console.log("Login successful for:", email); 
+        setSuccessMessage("Welcome back! Login successful.");
+        console.log("Login successful for:", email);
         setTimeout(() => navigate("/"), 2000);
-            } else {
-        setErrors({ ...errors, general: "Incorrect email or password please try again" });
+      } else {
+        setErrors({
+          ...errors,
+          general: "Incorrect email or password please try again",
+        });
       }
     }
   };
@@ -52,12 +59,13 @@ const Login = () => {
           handleLogin();
         }}
       >
+        {" "}
         {}
         {successMessage && <p className="successLabel">{successMessage}</p>}
-        
         {}
-        {errors.general && <p className="errorLabel general">{errors.general}</p>}
-        
+        {errors.general && (
+          <p className="errorLabel general">{errors.general}</p>
+        )}
         <div className="user-box">
           <input
             type="email"

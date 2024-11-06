@@ -7,11 +7,9 @@ export function Header(): JSX.Element {
   const handleLogin = () => {
     navigate("/login");
   };
-
   const handleRegister = () => {
     navigate("/register");
   };
-
   return (
     <header className="Header">
       <h1>Oversight Coupon System</h1>

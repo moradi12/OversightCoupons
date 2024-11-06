@@ -50,4 +50,11 @@ export class Coupon {
     this.isStackable = isStackable;
     this.createdAt = createdAt;
   }
+  calculateDiscountedPrice(): number {
+    if (this.discountType === "Percentage" && this.discount) {
+      return this.price - (this.price * this.discount) / 100;
+    } else if (this.discountType === "Amount" && this.discount) {
+      return this.price - this.discount;
+    }    return this.price;
+  }
 }

@@ -8,10 +8,7 @@ export function MainRoute(): JSX.Element {
         <div className="MainRoute">
             <Routes>
                 <Route path="/" element={<Main />} />
-                {/* <Route path="/add" element={<AddCoupon />} /> */}
-                {/* <Route path="/all" element={<AllCoupons />} /> */}
                  <Route path="/login" element={<Login />} />
-
                 <Route path="*" element={<Page404 />} />
             </Routes>
         </div>

@@ -10,13 +10,11 @@ export function Menu(): JSX.Element {
       <NavLink to="/admin/customers">Customer List</NavLink>
     </>
   );
-
   const handleMenu = () => {
     switch (menuType) {
       case "ADMIN":
         return <span>Welcome, Guest!</span>;
     }
   };
-
   return <div className="Menu">{handleMenu()}</div>;
 }
