@@ -1,10 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import AdminCommands from "../../Utils/AdminCommands"; // Adjust the import path as necessary
+import AdminCommands from "../../Utils/AdminCommands";
 import "./AddCustomer.css";
-
-//todo: finish the class
-
 
 const AddCustomer = () => {
   const [firstName, setFirstName] = useState<string>("");
@@ -35,8 +32,10 @@ const AddCustomer = () => {
     e.preventDefault();
     setError("");
     setSuccess("");
+
     const validationError = validateForm();
     if (validationError) {
+      console.error("Validation Error:", validationError); 
       setError(validationError);
       return;
     }
@@ -48,14 +47,14 @@ const AddCustomer = () => {
       password,
     };
 
-
-
     try {
       await adminCommands.createCustomer(customerData); 
       setSuccess("Customer added successfully!");
       setTimeout(() => navigate("/customers"), 2000);
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : "An unexpected error occurred, Please try again");
+      const errorMessage = err instanceof Error ? err.message : "An unexpected error occurred, Please try again";
+      console.error("API Error:", errorMessage);
+      setError(errorMessage);
     }
   };
 

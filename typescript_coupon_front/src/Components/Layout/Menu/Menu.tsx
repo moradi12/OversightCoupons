@@ -39,7 +39,7 @@ const buttonStyle = {
       <Button component={NavLink} to="/admin/customers" sx={buttonStyle}>
         Customer List
       </Button>
-      <Button component={NavLink} to="/admin/add/customer" sx={buttonStyle}>
+      <Button component={NavLink} to="/admin/add/" sx={buttonStyle}>
         Add Customer </Button>
       <Button component={NavLink} to="/admin/reports/" sx={buttonStyle}> Reports</Button>
     </Box>

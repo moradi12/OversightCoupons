@@ -1,4 +1,4 @@
-import { MainRoute } from "../../Pages/Route/MainRoute";
+import { MainRoute } from "../../Pages/Route/MainRoute/MainRoute";
 import { Footer } from "../Footer/Footer";
 import { Header } from "../Header/Header";
 import { Menu } from "../Menu/Menu";
