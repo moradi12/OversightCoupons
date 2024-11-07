@@ -12,6 +12,11 @@ const Login = () => {
     general: "",
   });
 
+
+/**
+ * validate email format 
+ */
+
   const validateInputs = (): boolean => {
     const newErrors = { email: "", password: "", general: "" };
     let isValid = true;
@@ -30,14 +35,19 @@ const Login = () => {
       newErrors.password = "Password must be at least 8 characters long";
       isValid = false;
     }
-     setErrors(newErrors);
+
+    setErrors(newErrors);
     return isValid;
   };
+
+/**
+ * admin login data
+ */
 
   const handleLogin = () => {
     if (validateInputs()) {
       if (email === "admin@admin.com" && password === "admin12345") {
-        setSuccessMessage("Welcome back! Login successful.");
+        setSuccessMessage("Welcome back! Login successful");
         console.log("Login successful for:", email);
         setTimeout(() => navigate("/"), 2000);
       } else {
@@ -60,6 +70,7 @@ const Login = () => {
       >
         {" "}
         {successMessage && <p className="successLabel">{successMessage}</p>}
+        {}
         {errors.general && (
           <p className="errorLabel general">{errors.general}</p>
         )}

@@ -16,24 +16,54 @@ export class Coupon {
   amount: number;
   isCombinable: boolean;
   creationDate: Date;
+  image: any;
+  isAvailable: boolean;
 
-  constructor(
-    id: number,
-    name: string,
-    description: string,
-    category: CouponCategory,
-    discountType: "Amount" | "Percentage" | undefined,
-    discount: number | undefined,
-    title: string,
-    startDate: Date,
-    endDate: Date | undefined,
-    price: number,
-    code: string,
-    createdByUserId: number,
-    amount: number,
-    isCombinable: boolean,
-    creationDate: Date
-  ) {
+
+  // testing
+  constructor({
+    id,
+    name,
+    description,
+    category,
+    discountType,
+    discount,
+    title,
+    startDate,
+    endDate,
+    price,
+    code,
+    createdByUserId,
+    amount,
+    isCombinable,
+    creationDate,
+    image,
+  }:
+  
+  
+  
+  //another 1 
+  {
+    id: number;
+    name: string;
+    description?: string;
+    category: CouponCategory;
+    discountType: "Amount" | "Percentage" | undefined;
+    discount?: number;
+    title: string;
+    startDate: Date;
+    endDate?: Date;
+    price: number;
+    code: string;
+    createdByUserId: number;
+    amount: number;
+    isCombinable: boolean;
+    creationDate: Date;
+    image: any;
+  })
+  
+  
+  {
     this.id = id;
     this.name = name;
     this.description = description;
@@ -49,7 +79,12 @@ export class Coupon {
     this.amount = amount;
     this.isCombinable = isCombinable;
     this.creationDate = creationDate;
+    this.image = image;
+    this.isAvailable = this.calculateAvailability();
   }
+
+  // calc method 
+
 
   calculateDiscountedPrice(): number {
     if (this.discountType === "Percentage" && this.discount) {
@@ -58,5 +93,11 @@ export class Coupon {
       return this.price - this.discount;
     }
     return this.price;
+  }
+
+
+  //check if avil
+  calculateAvailability(): boolean {
+    return this.amount > 0;
   }
 }
