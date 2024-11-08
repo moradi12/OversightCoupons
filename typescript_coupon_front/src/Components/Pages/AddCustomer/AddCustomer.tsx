@@ -1,5 +1,7 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { AdminContext } from "../../Layout/Context/AdminContext";
+import { UserDetails } from "../../Models/UserDetails";
 import AdminCommands from "../../Utils/AdminCommands";
 import "./AddCustomer.css";
 
@@ -9,22 +11,22 @@ const AddCustomer = () => {
   const [confirmPassword, setConfirmPassword] = useState<string>("");
   const [error, setError] = useState<string>("");
   const [success, setSuccess] = useState<string>("");
-  const [emailInUse, setEmailInUse] = useState<boolean>(false);
   const navigate = useNavigate();
-  const adminCommands = new AdminCommands(); 
+  const adminCommands = new AdminCommands();
+
+  const { UserDetails, setUserDetails } = useContext(AdminContext);
 
   const validateForm = (): string | null => {
-
     if (!email || !password || !confirmPassword) {
       return "All fields are required.";
     }
-    if (password.length < 8) { 
-      return "Password must be at least 8 characters long";
+    if (password.length < 8) {
+      return "Password must be at least 8 characters long.";
     }
     if (password !== confirmPassword) {
-      return "Passwords do not match";
+      return "Passwords do not match.";
     }
-    return null; 
+    return null;
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -34,23 +36,27 @@ const AddCustomer = () => {
 
     const validationError = validateForm();
     if (validationError) {
-      console.error("Validation Error:", validationError); 
       setError(validationError);
       return;
     }
 
-    const customerData = {
+    const customerData: UserDetails = {
+      id: Date.now(), // Unique ID using timestamp
       email,
       password,
     };
 
     try {
-      await adminCommands.createCustomer(customerData); 
+      await adminCommands.createCustomer(customerData);
+
+      // Functional update with null check
+      setUserDetails((preDetails) => [...(preDetails || []), customerData]);
+
       setSuccess("Customer added successfully!");
       setTimeout(() => navigate("/"), 2000);
     } catch (err: unknown) {
-      const errorMessage = err instanceof Error ? err.message : "An unexpected error occurred, Please try again";
-      console.error("API Error:", errorMessage); 
+      const errorMessage =
+        err instanceof Error ? err.message : "An unexpected error occurred. Please try again.";
       setError(errorMessage);
     }
   };
@@ -66,16 +72,10 @@ const AddCustomer = () => {
           <input
             type="email"
             value={email}
-            onChange={(e) => {
-              setEmail(e.target.value);
-              setEmailInUse(false);
-            }}
+            onChange={(e) => setEmail(e.target.value)}
             placeholder="Enter email"
             required
           />
-          {emailInUse && (
-            <span className="error-text">Email already in use!!!</span>
-          )}
         </div>
         <div className="form-group">
           <label>Password:</label>
@@ -94,7 +94,8 @@ const AddCustomer = () => {
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
             placeholder="Confirm password"
-            required />
+            required
+          />
         </div>
         <button type="submit" className="submit-button">
           Add Customer

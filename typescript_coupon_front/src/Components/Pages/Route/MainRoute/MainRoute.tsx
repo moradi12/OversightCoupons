@@ -9,10 +9,9 @@ export function MainRoute(): JSX.Element {
   return (
     <div className="MainRoute">
       <Routes>
-        <Route element={<ProtectedRoutes />}>
-          <Route path="/" element={<Main />} />
-          <Route path="/admin/add" element={<AddCustomer />} />
-        </Route>
+        <Route element={<ProtectedRoutes />}></Route>
+        <Route path="/" element={<Main />} />
+        <Route path="/admin/add" element={<AddCustomer />} />
 
         <Route path="/login" element={<Login />} />
 

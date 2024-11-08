@@ -38,21 +38,18 @@ const Login = () => {
     return isValid;
   };
 
-  /**
-   * admin login data
-   */
-
   const handleLogin = () => {
     if (validateInputs()) {
-      if (email === UserDetails?.email && password === UserDetails?.password) {
+      const user = UserDetails?.find((user) => user.email === email);
+      if (user && user.password === password) {
         setSuccessMessage("Welcome back! Login successful");
-        console.log("Login successful for:", email);
+        console.log(`User logged in successfully: ${JSON.stringify(user)}`); // Added console.log
         setFinishProvider(true);
         setTimeout(() => navigate("/all"), 2000);
       } else {
         setErrors({
           ...errors,
-          general: "Incorrect email or password please try again",
+          general: "Incorrect email or password. Please try again.",
         });
       }
     }
@@ -75,7 +72,7 @@ const Login = () => {
           <input
             type="email"
             value={email}
-            placeholder="Email "
+            placeholder="Email"
             onChange={(e) => setEmail(e.target.value)}
             required
           />
@@ -85,7 +82,7 @@ const Login = () => {
           <input
             type="password"
             value={password}
-            placeholder="Password "
+            placeholder="Password"
             onChange={(e) => setPassword(e.target.value)}
             required
           />
