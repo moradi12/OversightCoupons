@@ -21,25 +21,31 @@ class AdminCommands {
  * validate
  */
 
-  validateCustomerData(customerData) {
-    if (!customerData || !customerData.name || !customerData.email) {
-      throw new Error('Invalid customer data: Name and email are required!');
-    }
+validateCustomerData(customerData) {
+  if (!customerData || !customerData.email || !customerData.password) {
+    throw new Error('Invalid customer data: Email and password are required!');
   }
+}
 
 /**
- * add customer
+ * add customer done
  */
 
-  createCustomer(customerData) {
-    this.validateCustomerData(customerData);
+createCustomer(customerData) {
+  try {
+    this.validateCustomerData(customerData); 
     console.log('Creating customer:', customerData);
+    
     return this.handleRequest(
       () => api.post('/admin/add/customers', customerData), 
-      'Customer created successfully:','Failed to create customer.Please try again'
+      'Customer created successfully:', 
+      'Failed to create customer. Please try again.'
     );
+  } catch (error) {
+    console.error('Validation Error:', error.message);
+    throw new Error(error.message); 
   }
-
+}
   /**
  * update customer
  */

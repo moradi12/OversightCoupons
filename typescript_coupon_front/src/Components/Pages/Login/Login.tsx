@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { AdminContext } from "../../Layout/Context/AdminContext";
 import "./Login.css";
 
 const Login = () => {
@@ -12,11 +13,7 @@ const Login = () => {
     password: "",
     general: "",
   });
-
-
-/**
- * validate email format 
- */
+  const { setFinishProvider, UserDetails } = useContext(AdminContext);
 
   const validateInputs = (): boolean => {
     const newErrors = { email: "", password: "", general: "" };
@@ -41,16 +38,17 @@ const Login = () => {
     return isValid;
   };
 
-/**
- * admin login data
- */
+  /**
+   * admin login data
+   */
 
   const handleLogin = () => {
     if (validateInputs()) {
-      if (email === "admin@admin.com" && password === "admin12345") {
+      if (email === UserDetails?.email && password === UserDetails?.password) {
         setSuccessMessage("Welcome back! Login successful");
         console.log("Login successful for:", email);
-        setTimeout(() => navigate("/"), 2000);
+        setFinishProvider(true);
+        setTimeout(() => navigate("/all"), 2000);
       } else {
         setErrors({
           ...errors,
@@ -69,9 +67,7 @@ const Login = () => {
           handleLogin();
         }}
       >
-        {" "}
         {successMessage && <p className="successLabel">{successMessage}</p>}
-        {}
         {errors.general && (
           <p className="errorLabel general">{errors.general}</p>
         )}
@@ -79,7 +75,7 @@ const Login = () => {
           <input
             type="email"
             value={email}
-            placeholder="Enter email address here"
+            placeholder="Email "
             onChange={(e) => setEmail(e.target.value)}
             required
           />
@@ -89,7 +85,7 @@ const Login = () => {
           <input
             type="password"
             value={password}
-            placeholder="Enter password here"
+            placeholder="Password "
             onChange={(e) => setPassword(e.target.value)}
             required
           />

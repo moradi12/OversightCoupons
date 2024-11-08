@@ -4,8 +4,6 @@ import AdminCommands from "../../Utils/AdminCommands";
 import "./AddCustomer.css";
 
 const AddCustomer = () => {
-  const [firstName, setFirstName] = useState<string>("");
-  const [lastName, setLastName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
@@ -16,10 +14,11 @@ const AddCustomer = () => {
   const adminCommands = new AdminCommands(); 
 
   const validateForm = (): string | null => {
-    if (!firstName || !lastName || !email || !password || !confirmPassword) {
+
+    if (!email || !password || !confirmPassword) {
       return "All fields are required.";
     }
-    if (password.length < 5) {
+    if (password.length < 8) { 
       return "Password must be at least 8 characters long";
     }
     if (password !== confirmPassword) {
@@ -41,8 +40,6 @@ const AddCustomer = () => {
     }
 
     const customerData = {
-      firstName,
-      lastName,
       email,
       password,
     };
@@ -50,10 +47,10 @@ const AddCustomer = () => {
     try {
       await adminCommands.createCustomer(customerData); 
       setSuccess("Customer added successfully!");
-      setTimeout(() => navigate("/customers"), 2000);
+      setTimeout(() => navigate("/"), 2000);
     } catch (err: unknown) {
       const errorMessage = err instanceof Error ? err.message : "An unexpected error occurred, Please try again";
-      console.error("API Error:", errorMessage);
+      console.error("API Error:", errorMessage); 
       setError(errorMessage);
     }
   };
@@ -64,25 +61,6 @@ const AddCustomer = () => {
       {error && <div className="error-message">{error}</div>}
       {success && <div className="success-message">{success}</div>}
       <form onSubmit={handleSubmit} className="add-customer-form">
-        <div className="form-group">
-          <label>First Name:</label>
-          <input
-            type="text"
-            value={firstName}
-            onChange={(e) => setFirstName(e.target.value)}
-            placeholder="Enter first name"
-            required
-          />
-        </div>
-        <div className="form-group">
-          <label>Last Name:</label>
-          <input
-            type="text"
-            value={lastName}
-            onChange={(e) => setLastName(e.target.value)}
-            placeholder="Enter last name"
-            required />
-        </div>
         <div className="form-group">
           <label>Email:</label>
           <input
