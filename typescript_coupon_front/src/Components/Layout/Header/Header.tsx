@@ -1,32 +1,25 @@
 import { Box, Button, ButtonGroup, Typography } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom"; // Ensure navigation works
 import { AdminContext } from "../Context/AdminContext";
 
 export function Header(): JSX.Element {
-  const navigate = useNavigate();
+  const { finishProvider, logout } = useContext(AdminContext);
   const [welcomeMessage, setWelcomeMessage] = useState<string>("");
-  const {finishProvider} = useContext(AdminContext);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const loggedIn = localStorage.getItem("isLoggedIn");
-    if (loggedIn === "true") {
-      setWelcomeMessage(`Welcome back, ${localStorage.getItem("userEmail")}!`);
+    const userEmail = localStorage.getItem("userEmail");
+    if (loggedIn === "true" && userEmail) {
+      setWelcomeMessage(`Welcome back, ${userEmail}!`);
+    } else {
+      setWelcomeMessage("");
     }
-  }, []);
+  }, [finishProvider]);
 
-  const handleLogin = () => {
-    navigate("/login");
-  };
-
-  const handleLogout = () => {
-    localStorage.removeItem("isLoggedIn");
-    localStorage.removeItem("userEmail");
-    setWelcomeMessage("See you next time!");
-
-    setTimeout(() => {
-      navigate("/");
-    }, 2000);
+  const handleLoginRedirect = () => {
+    navigate("/login"); 
   };
 
   return (
@@ -44,13 +37,13 @@ export function Header(): JSX.Element {
       }}
     >
       <Typography variant="h6" sx={{ color: "#1976d2" }}>
-        {welcomeMessage}
+        {welcomeMessage || "Please login"}
       </Typography>
       <ButtonGroup variant="contained" size="small">
         {finishProvider ? (
           <Button
             color="primary"
-            onClick={handleLogout}
+            onClick={logout}
             sx={{
               backgroundColor: "#d32f2f",
               "&:hover": { backgroundColor: "#9a0007" },
@@ -63,7 +56,7 @@ export function Header(): JSX.Element {
         ) : (
           <Button
             color="primary"
-            onClick={handleLogin}
+            onClick={handleLoginRedirect}
             sx={{
               backgroundColor: "#1976d2",
               "&:hover": { backgroundColor: "#115293" },

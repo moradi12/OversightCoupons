@@ -1,4 +1,4 @@
-import { CouponCategory } from "../Models/CouponCategory ";
+import { CouponCategory } from "./CouponCategory ";
 
 export class Coupon {
   id: number;
@@ -11,7 +11,7 @@ export class Coupon {
   startDate: Date;
   endDate?: Date;
   price: number;
-  code: string;
+  code: string; 
   createdByUserId: number;
   amount: number;
   isCombinable: boolean;
@@ -19,8 +19,6 @@ export class Coupon {
   image: any;
   isAvailable: boolean;
 
-
-  // testing
   constructor({
     id,
     name,
@@ -32,18 +30,13 @@ export class Coupon {
     startDate,
     endDate,
     price,
-    code,
     createdByUserId,
     amount,
     isCombinable,
     creationDate,
     image,
-  }:
-  
-  
-  
-  //another 1 
-  {
+    code,
+  }: {
     id: number;
     name: string;
     description?: string;
@@ -54,16 +47,13 @@ export class Coupon {
     startDate: Date;
     endDate?: Date;
     price: number;
-    code: string;
     createdByUserId: number;
     amount: number;
     isCombinable: boolean;
     creationDate: Date;
     image: any;
-  })
-  
-  
-  {
+    code?: string; //  auto-generated if not provided!
+  }) {
     this.id = id;
     this.name = name;
     this.description = description;
@@ -74,18 +64,18 @@ export class Coupon {
     this.startDate = startDate;
     this.endDate = endDate;
     this.price = price;
-    this.code = code;
     this.createdByUserId = createdByUserId;
     this.amount = amount;
     this.isCombinable = isCombinable;
     this.creationDate = creationDate;
     this.image = image;
     this.isAvailable = this.calculateAvailability();
+
+    // auto-generate code if not provided
+    this.code = code || this.generateCode();
   }
 
-  // calc method 
-
-
+  // Calculate discounted price
   calculateDiscountedPrice(): number {
     if (this.discountType === "Percentage" && this.discount) {
       return this.price - (this.price * this.discount) / 100;
@@ -95,9 +85,15 @@ export class Coupon {
     return this.price;
   }
 
-
-  //check if avil
+  // Check if available
   calculateAvailability(): boolean {
     return this.amount > 0;
+  }
+
+  // Generate a random unique code
+  private generateCode(): string {
+    const timestamp = Date.now().toString();
+    const randomDigits = Math.floor(1000 + Math.random() * 9000).toString(); // 4-digit random number!!
+    return `${timestamp}-${randomDigits}`;
   }
 }

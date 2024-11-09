@@ -4,9 +4,11 @@ import { UserDetails } from "../../Models/UserDetails";
 
 export const AdminContext = createContext<IUserContextProvider>({
   UserDetails: null,
-  setUserDetails: () => {}, // Default no-op
+  setUserDetails: () => {}, 
   finishProvider: false,
-  setFinishProvider: () => {}, // Default no-op
+  setFinishProvider: () => {}, 
+  login: () => false,
+  logout: () => {},
 });
 
 export const AdminContextProvider = ({ children }: { children: React.ReactNode }) => {
@@ -19,6 +21,26 @@ export const AdminContextProvider = ({ children }: { children: React.ReactNode }
     },
   ]);
 
+  const login = (email: string, password: string): boolean => {
+    const user = UserDetails?.find(
+      (user) => user.email === email && user.password === password
+    );
+    if (user) {
+      setFinishProvider(true);
+      localStorage.setItem("isLoggedIn", "true");
+      localStorage.setItem("userEmail", email);
+      return true;
+    }
+    return false;
+  };
+
+  const logout = () => {
+    setFinishProvider(false);
+    localStorage.removeItem("isLoggedIn");
+    localStorage.removeItem("userEmail");
+    window.location.reload();
+  };
+
   return (
     <AdminContext.Provider
       value={{
@@ -26,6 +48,8 @@ export const AdminContextProvider = ({ children }: { children: React.ReactNode }
         setUserDetails,
         finishProvider,
         setFinishProvider,
+        login,
+        logout,
       }}
     >
       {children}

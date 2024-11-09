@@ -10,4 +10,8 @@ export default interface IUserContextProvider {
   ) => void;
   finishProvider: boolean;
   setFinishProvider: (finishProvider: boolean) => void;
+  
+  // הוספת פונקציות login ו-logout
+  login: (email: string, password: string) => boolean;
+  logout: () => void;
 }
