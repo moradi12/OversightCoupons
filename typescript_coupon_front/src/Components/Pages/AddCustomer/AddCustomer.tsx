@@ -1,8 +1,6 @@
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AdminContext } from "../../Layout/Context/AdminContext";
-import { UserDetails } from "../../Models/UserDetails";
-import AdminCommands from "../../Utils/AdminCommands";
 import "./AddCustomer.css";
 
 const AddCustomer = () => {
@@ -12,9 +10,9 @@ const AddCustomer = () => {
   const [error, setError] = useState<string>("");
   const [success, setSuccess] = useState<string>("");
   const navigate = useNavigate();
-  const adminCommands = new AdminCommands();
+  // const adminCommands = new AdminCommands();
 
-  const { UserDetails, setUserDetails } = useContext(AdminContext);
+  const {addUser} = useContext(AdminContext);
 
   const validateForm = (): string | null => {
     if (!email || !password || !confirmPassword) {
@@ -40,17 +38,8 @@ const AddCustomer = () => {
       return;
     }
 
-    const customerData: UserDetails = {
-      id: Date.now(), // Unique ID using timestamp
-      email,
-      password,
-    };
-
     try {
-      await adminCommands.createCustomer(customerData);
-
-      setUserDetails((preDetails) => [...(preDetails || []), customerData]);
-
+      addUser(email, password)
       setSuccess("Customer added successfully!");
       setTimeout(() => navigate("/"), 2000);
     } catch (err: unknown) {

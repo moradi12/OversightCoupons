@@ -42,7 +42,7 @@ export function Menu(): JSX.Element {
       <Button component={NavLink} to="/all" sx={buttonStyle}>
         Coupon List
       </Button>
-      <Button component={NavLink} to="/admin/customers" sx={buttonStyle}>
+      <Button component={NavLink} to="/all/customers" sx={buttonStyle}>
         Customer List
       </Button>
       <Button component={NavLink} to="/admin/add/" sx={buttonStyle}>

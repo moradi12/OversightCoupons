@@ -1,15 +1,14 @@
-import React, { createContext, useState } from "react";
+import React, { createContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import IUserContextProvider from "../../Models/IUserContextProvider";
 import { UserDetails } from "../../Models/UserDetails";
 
 export const AdminContext = createContext<IUserContextProvider>({
   UserDetails: null,
-  setUserDetails: () => {},
   finishProvider: false,
-  setFinishProvider: () => {},
   login: () => false,
   logout: () => {},
+  addUser: () => {},
 });
 
 export const AdminContextProvider = ({
@@ -17,17 +16,26 @@ export const AdminContextProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const navigate = useNavigate(); // Use navigate to redirect
+  const navigate = useNavigate();
   const [finishProvider, setFinishProvider] = useState(
     localStorage.getItem("isLoggedIn") === "true"
-  ); // Initialize based on localStorage
-  const [UserDetails, setUserDetails] = useState<UserDetails[] | null>([
-    {
-      id: 1,
-      email: "admin@admin.com",
-      password: "admin12345",
-    },
-  ]);
+  );
+  const [UserDetails, setUserDetails] = useState<UserDetails[] | null>();
+
+  useEffect(() => {
+    const stored = localStorage.getItem("userDetails");
+    setUserDetails(
+      stored
+        ? JSON.parse(stored)
+        : [
+            {
+              id: 1,
+              email: "admin@admin.com",
+              password: "admin12345",
+            },
+          ]
+    );
+  }, []);
 
   const login = (email: string, password: string): boolean => {
     const user = UserDetails?.find(
@@ -49,15 +57,25 @@ export const AdminContextProvider = ({
     navigate("/login");
   };
 
+  const addUser = (email: string, password: string) => {
+    const newDetail = {
+      id: UserDetails ? UserDetails.length + 1 : 1,
+      email,
+      password,
+    };
+    const newDetails = [...(UserDetails || []), newDetail];
+    setUserDetails((prev) => [...(prev || []), newDetail]);
+    localStorage.setItem("userDetails", JSON.stringify(newDetails));
+  };
+
   return (
     <AdminContext.Provider
       value={{
         UserDetails,
-        setUserDetails,
         finishProvider,
-        setFinishProvider,
         login,
         logout,
+        addUser,
       }}
     >
       {children}
