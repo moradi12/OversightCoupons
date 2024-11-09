@@ -1,4 +1,4 @@
-import { CouponCategory } from "./CouponCategory ";
+import { CouponCategory } from "../Models/CouponCategory ";
 
 export class Coupon {
   id: number;
@@ -11,13 +11,15 @@ export class Coupon {
   startDate: Date;
   endDate?: Date;
   price: number;
-  code: string; 
+  code: string;
   createdByUserId: number;
   amount: number;
   isCombinable: boolean;
   creationDate: Date;
   image: any;
   isAvailable: boolean;
+  maxUsage: number; 
+  currentUsage: number; 
 
   constructor({
     id,
@@ -36,6 +38,8 @@ export class Coupon {
     creationDate,
     image,
     code,
+    maxUsage,
+    currentUsage = 0, // Default to 0
   }: {
     id: number;
     name: string;
@@ -52,7 +56,9 @@ export class Coupon {
     isCombinable: boolean;
     creationDate: Date;
     image: any;
-    code?: string; //  auto-generated if not provided!
+    code?: string; // Auto-generated if not provided
+    maxUsage: number; 
+    currentUsage?: number; 
   }) {
     this.id = id;
     this.name = name;
@@ -70,12 +76,16 @@ export class Coupon {
     this.creationDate = creationDate;
     this.image = image;
     this.isAvailable = this.calculateAvailability();
+    this.maxUsage = maxUsage;
+    this.currentUsage = currentUsage;
 
-    // auto-generate code if not provided
+    // Auto-generate code if not provided!!!!
     this.code = code || this.generateCode();
   }
 
-  // Calculate discounted price
+  /**
+   * Calculate the discounted price based on the discount type and value.
+   */
   calculateDiscountedPrice(): number {
     if (this.discountType === "Percentage" && this.discount) {
       return this.price - (this.price * this.discount) / 100;
@@ -85,15 +95,36 @@ export class Coupon {
     return this.price;
   }
 
-  // Check if available
+  /**
+   * Check if the coupon is still available for usage.
+   */
   calculateAvailability(): boolean {
-    return this.amount > 0;
+    return this.amount > 0 && this.currentUsage < this.maxUsage;
   }
 
-  // Generate a random unique code
+  /**
+   * Increment the usage count of the coupon if it can still be used
+   */
+  incrementUsage(): void {
+    if (this.currentUsage >= this.maxUsage) {
+      throw new Error("Coupon has reached its maximum usage limit.");
+    }
+    this.currentUsage++;
+  }
+
+  /**
+   * Generate a random unique code for the coupon
+   */
   private generateCode(): string {
     const timestamp = Date.now().toString();
-    const randomDigits = Math.floor(1000 + Math.random() * 9000).toString(); // 4-digit random number!!
+    const randomDigits = Math.floor(1000 + Math.random() * 9000).toString(); // 4-digit random number
     return `${timestamp}-${randomDigits}`;
+  }
+
+  /**
+   * Determine if the coupon can be combined with other offers.
+   */
+  canCombine(): boolean {
+    return this.isCombinable;
   }
 }

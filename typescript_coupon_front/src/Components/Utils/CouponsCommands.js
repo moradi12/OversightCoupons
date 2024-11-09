@@ -79,3 +79,30 @@ export async function getAllCoupons() {
     throw new Error(`Failed to fetch coupons. Please try`);
   }
 }
+
+export async function getCouponsByUser(userId) {
+  try {
+    const response = await api.get(`/coupons/user/${userId}`);
+    return response.data;
+  } catch (error) {
+    console.error(`Error fetching coupons for user ID ${userId}: ${error}`);
+    throw new Error(error.response?.data || `Failed to fetch coupons for user ID ${userId}`);
+  }
+}
+
+/**
+ * Get coupons by date range
+ */
+export async function getCouponsByDateRange(startDate, endDate) {
+  try {
+    const response = await api.get("/coupons/date-range", {
+      params: {  startDate,endDate,},
+    });
+    return response.data;
+  } catch (error) {
+    console.error(
+      `Error fetching coupons by date range (startDate: ${startDate}, endDate: ${endDate}): ${error}`
+    );
+    throw new Error(error.response?.data || `Failed to fetch coupons by date range`);
+  }
+}

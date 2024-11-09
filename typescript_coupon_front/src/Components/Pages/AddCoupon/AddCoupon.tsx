@@ -153,6 +153,15 @@ export function AddCoupon(): JSX.Element {
             {...register("image")}
           />
         </div>
+        <div className="form-group">
+  <label htmlFor="maxUsage">Maximum Usage:</label>
+  <input
+    type="number"
+    id="maxUsage"
+    {...register("maxUsage", { required: "Maximum usage is required", min: 1 })}
+  />
+  {errors.maxUsage && <span className="error">{errors.maxUsage.message}</span>}
+</div>
 
         <button type="submit" className="submit-button">Add Coupon</button>
       </form>

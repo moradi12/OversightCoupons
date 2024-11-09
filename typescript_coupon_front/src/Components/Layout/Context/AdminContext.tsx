@@ -1,18 +1,26 @@
 import React, { createContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import IUserContextProvider from "../../Models/IUserContextProvider";
 import { UserDetails } from "../../Models/UserDetails";
 
 export const AdminContext = createContext<IUserContextProvider>({
   UserDetails: null,
-  setUserDetails: () => {}, 
+  setUserDetails: () => {},
   finishProvider: false,
-  setFinishProvider: () => {}, 
+  setFinishProvider: () => {},
   login: () => false,
   logout: () => {},
 });
 
-export const AdminContextProvider = ({ children }: { children: React.ReactNode }) => {
-  const [finishProvider, setFinishProvider] = useState(false);
+export const AdminContextProvider = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => {
+  const navigate = useNavigate(); // Use navigate to redirect
+  const [finishProvider, setFinishProvider] = useState(
+    localStorage.getItem("isLoggedIn") === "true"
+  ); // Initialize based on localStorage
   const [UserDetails, setUserDetails] = useState<UserDetails[] | null>([
     {
       id: 1,
@@ -38,7 +46,7 @@ export const AdminContextProvider = ({ children }: { children: React.ReactNode }
     setFinishProvider(false);
     localStorage.removeItem("isLoggedIn");
     localStorage.removeItem("userEmail");
-    window.location.reload();
+    navigate("/login");
   };
 
   return (
