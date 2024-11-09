@@ -5,14 +5,14 @@ import "./Login.css";
 
 const Login = () => {
   const navigate = useNavigate();
-  const { login } = useContext(AdminContext); // שימוש בפונקציה מהקונטקסט
+  const { login } = useContext(AdminContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
   const handleLogin = () => {
     if (login(email, password)) {
-      navigate("/all"); // מעבר לעמוד הבא
+      navigate("/all");
     } else {
       setError("Incorrect email or password. Please try again.");
     }

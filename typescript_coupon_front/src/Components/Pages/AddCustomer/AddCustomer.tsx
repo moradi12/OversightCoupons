@@ -49,7 +49,6 @@ const AddCustomer = () => {
     try {
       await adminCommands.createCustomer(customerData);
 
-      // Functional update with null check
       setUserDetails((preDetails) => [...(preDetails || []), customerData]);
 
       setSuccess("Customer added successfully!");
