@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
+import { notify } from "../../Utils/notif";
 import "./AllCoupons.css";
 
+// Define the structure of a coupon
 interface Coupon {
   id: number;
   name: string;
@@ -29,7 +31,7 @@ const AllCoupons: React.FC = () => {
         const parsedCoupons: Coupon[] = JSON.parse(storedCoupons).map(
           (coupon: Coupon, index: number) => ({
             ...coupon,
-            id: coupon.id || index, // Ensure each coupon has a unique ID!
+            id: coupon.id || index, // Ensure each coupon has a unique ID
           })
         );
         setCoupons(parsedCoupons);
@@ -37,6 +39,19 @@ const AllCoupons: React.FC = () => {
       }
     } catch (error) {
       console.error("Error loading coupons:", error);
+    }
+  };
+
+  const deleteCoupon = (id: number) => {
+    try {
+      const updatedCoupons = coupons.filter((coupon) => coupon.id !== id);
+      setCoupons(updatedCoupons);
+      localStorage.setItem("coupons", JSON.stringify(updatedCoupons));
+      notify.success(`Coupon with id ${id} deleted successfully`);
+      console.log(`Coupon with id ${id} deleted`);
+    } catch (error) {
+      notify.error(`Failed to delete coupon with id ${id}`);
+      console.error("Error deleting coupon:", error);
     }
   };
 
@@ -56,10 +71,11 @@ const AllCoupons: React.FC = () => {
               <div>Discount Type: {coupon.discountType || "Percentage"}</div>
               <div>Discount: {coupon.discount}%</div>
               <div>Price: ${coupon.price !== undefined ? coupon.price : "Not Available"}</div>
-              <div>Amount: {coupon.amount !== undefined ? coupon.amount : "Not Available"}</div>
+              <div>Amount: {coupon.amount !== undefined ? coupon.amount : "N/A"}</div>
               {coupon.category && <div>Category: {coupon.category}</div>}
               {coupon.startDate && <div>Start Date: {coupon.startDate}</div>}
               {coupon.endDate && <div>End Date: {coupon.endDate}</div>}
+              <button onClick={() => deleteCoupon(coupon.id)}>Delete</button>
             </li>
           ))}
         </ul>
