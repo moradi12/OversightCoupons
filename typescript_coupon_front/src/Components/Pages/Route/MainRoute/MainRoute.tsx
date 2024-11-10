@@ -10,7 +10,7 @@ import { Page404 } from "../../Page404/Page404";
 
 export function MainRoute(): JSX.Element {
   return (
-    <div className="MainRoute">
+    <div className="MainRoutes">
       <Routes>
         {/* Protected Routes */}
         <Route element={<ProtectedRoutes />}>

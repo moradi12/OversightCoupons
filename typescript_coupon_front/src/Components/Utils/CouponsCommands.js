@@ -12,7 +12,7 @@ export const api = axios.create({
 
 export async function createCoupon(couponData) {
   try {
-    const response = await api.post("/coupons", couponData);
+    const response = await api.post("/add/coupons", couponData);
     return response.data;
   } catch (error) {
     console.error(`Error creating coupon: ${error.response?.data || error.message}`);
@@ -28,7 +28,7 @@ export async function createCoupon(couponData) {
 
 export async function updateCoupon(couponId, couponData) {
   try {
-    const response = await api.put(`/coupons/${couponId}`, couponData);
+    const response = await api.put(`/update/coupons/${couponId}`, couponData);
     return response.data;
   } catch (error) {
     console.error(`Error updating coupon with ID ${couponId}: ${error}`);
@@ -43,7 +43,7 @@ export async function updateCoupon(couponId, couponData) {
 
 export async function deleteCoupon(couponId) {
   try {
-    const response = await api.delete(`/coupons/${couponId}`);
+    const response = await api.delete(`/coupons/delete/${couponId}`);
     return response.data || `Coupon with ID ${couponId} successfully deleted.`;
   } catch (error) {
     console.error(`Error deleting coupon with ID ${couponId}: ${error}`);

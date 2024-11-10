@@ -49,7 +49,6 @@ export function Menu(): JSX.Element {
         Add Customer{" "}
       </Button>
       <Button component={NavLink} to="/admin/reports/" sx={buttonStyle}>
-        {" "}
         Reports
       </Button>
       <Button component={NavLink} to="/admin/coupon/add" sx={buttonStyle}>
