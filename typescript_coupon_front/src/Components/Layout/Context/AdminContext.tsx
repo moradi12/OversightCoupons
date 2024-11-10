@@ -11,7 +11,7 @@ export const AdminContext = createContext<IUserContextProvider>({
   logout: () => {},
   addUser: () => {},
   deleteUser: () => {},
-  editUserPassword: () => {}, 
+  editUserPassword: () => {},
 });
 
 export const AdminContextProvider = ({
@@ -20,7 +20,7 @@ export const AdminContextProvider = ({
   children: React.ReactNode;
 }) => {
   const navigate = useNavigate();
-  const [finishProvider, setFinishProvider] = useState(
+  const [finishProvider, setFinishProvider] = useState<boolean>(
     localStorage.getItem("isLoggedIn") === "true"
   );
   const [UserDetails, setUserDetails] = useState<UserDetails[] | null>(null);
@@ -40,6 +40,13 @@ export const AdminContextProvider = ({
           ]
     );
   }, []);
+
+  // Save user details to local storage whenever they change
+  useEffect(() => {
+    if (UserDetails) {
+      localStorage.setItem("userDetails", JSON.stringify(UserDetails));
+    }
+  }, [UserDetails]);
 
   // Login functionality
   const login = (email: string, password: string): boolean => {
@@ -72,14 +79,13 @@ export const AdminContextProvider = ({
     };
     const newDetails = [...(UserDetails || []), newDetail];
     setUserDetails(newDetails);
-    localStorage.setItem("userDetails", JSON.stringify(newDetails));
   };
 
   // Delete a user by ID
   const deleteUser = (id: number) => {
-    const updatedDetails = UserDetails?.filter((user) => user.id !== id) || null;
+    const updatedDetails =
+      UserDetails?.filter((user) => user.id !== id) || null;
     setUserDetails(updatedDetails);
-    localStorage.setItem("userDetails", JSON.stringify(updatedDetails));
   };
 
   // Edit user password
@@ -89,7 +95,6 @@ export const AdminContextProvider = ({
         user.id === id ? { ...user, password: newPassword } : user
       ) || null;
     setUserDetails(updatedDetails);
-    localStorage.setItem("userDetails", JSON.stringify(updatedDetails));
   };
 
   return (
@@ -101,7 +106,7 @@ export const AdminContextProvider = ({
         logout,
         addUser,
         deleteUser,
-        editUserPassword, 
+        editUserPassword,
       }}
     >
       {children}

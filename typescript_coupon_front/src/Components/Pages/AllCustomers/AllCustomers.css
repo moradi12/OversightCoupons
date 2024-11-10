@@ -1,46 +1,57 @@
 .customer-list {
-    list-style: none;
-    padding: 0;
-    margin: 20px auto;
-    max-width: 600px;
-    
-  }
-  
-  .customer-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px;
-    border-bottom: 1px solid #ddd;
-  }
-  
-  .action-button {
-    margin: 0 5px;
-    padding: 5px 10px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  
-  .action-button.save {
-    color: green;
-  }
-  
-  .action-button.cancel {
-    color: gray;
-  }
-  
-  .action-button.edit {
-    color: blue;
-  }
-  
-  .action-button.delete {
-    color: red;
-  }
-  
-  .input-field {
-    padding: 5px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  }
-  
+  list-style: none;
+  padding: 0;
+  margin: 20px auto;
+  max-width: 400px;
+  background: #aecddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.customer-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 30px;
+  border-bottom: 12px solid #f0f0f0;
+  transition: background-color 0.3s;
+}
+
+.customer-item:hover {
+  background: #f9f9f9;
+}
+
+.password-input {
+  padding: 7px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  margin-right: 10px;
+}
+
+.action-button {
+  margin: 0 5px;
+  padding: 7px 15px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  color: #fff;
+  transition:  0.3s, transform 0.2s;
+}
+
+.action-button:hover {
+  transform: scale(1.05);
+}
+
+.save-button {
+  background: linear-gradient(45deg, #4caf50, #81c784);
+}
+.cancel-button {
+  background: linear-gradient(45deg, #757575, #b0bec5);
+}
+.edit-button {
+  background: linear-gradient(45deg, #1976d2, #42a5f5);
+}
+
+.delete-button {
+  background: linear-gradient(45deg, #d32f2f, #e57373);
+}

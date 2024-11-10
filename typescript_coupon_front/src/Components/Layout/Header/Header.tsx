@@ -1,6 +1,6 @@
 import { Box, Button, ButtonGroup, Typography } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom"; // Ensure navigation works
+import { useNavigate } from "react-router-dom";
 import { AdminContext } from "../Context/AdminContext";
 
 export function Header(): JSX.Element {
@@ -19,7 +19,7 @@ export function Header(): JSX.Element {
   }, [finishProvider]);
 
   const handleLoginRedirect = () => {
-    navigate("/login"); 
+    navigate("/login");
   };
 
   return (
@@ -43,7 +43,10 @@ export function Header(): JSX.Element {
         {finishProvider ? (
           <Button
             color="primary"
-            onClick={logout}
+            onClick={() => {
+              logout();
+              navigate("/login");
+            }}
             sx={{
               backgroundColor: "#d32f2f",
               "&:hover": { backgroundColor: "#9a0007" },
