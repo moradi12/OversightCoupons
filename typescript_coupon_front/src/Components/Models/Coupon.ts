@@ -39,7 +39,7 @@ export class Coupon {
     image,
     code,
     maxUsage,
-    currentUsage = 0, // Default to 0
+    currentUsage = 0, 
   }: {
     id: number;
     name: string;
@@ -84,7 +84,7 @@ export class Coupon {
   }
 
   /**
-   * Calculate the discounted price based on the discount type and value.
+   * Calculate the discounted price based on the discount type and value
    */
   calculateDiscountedPrice(): number {
     if (this.discountType === "Percentage" && this.discount) {
@@ -122,7 +122,7 @@ export class Coupon {
   }
 
   /**
-   * Determine if the coupon can be combined with other offers.
+   * Determine if the coupon can be combined with other offers
    */
   canCombine(): boolean {
     return this.isCombinable;
