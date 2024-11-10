@@ -6,4 +6,6 @@ export default interface IUserContextProvider {
   login: (email: string, password: string) => boolean;
   logout: () => void;
   addUser: (email: string, password: string) => void;
+  deleteUser: (id: number) => void; 
+  editUserPassword: (id: number, newPassword: string) => void; 
 }

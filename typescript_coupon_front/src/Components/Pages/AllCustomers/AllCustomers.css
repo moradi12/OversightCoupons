@@ -1,0 +1,46 @@
+.customer-list {
+    list-style: none;
+    padding: 0;
+    margin: 20px auto;
+    max-width: 600px;
+    
+  }
+  
+  .customer-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .action-button {
+    margin: 0 5px;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .action-button.save {
+    color: green;
+  }
+  
+  .action-button.cancel {
+    color: gray;
+  }
+  
+  .action-button.edit {
+    color: blue;
+  }
+  
+  .action-button.delete {
+    color: red;
+  }
+  
+  .input-field {
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  

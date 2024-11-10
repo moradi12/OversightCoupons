@@ -3,12 +3,15 @@ import { useNavigate } from "react-router-dom";
 import IUserContextProvider from "../../Models/IUserContextProvider";
 import { UserDetails } from "../../Models/UserDetails";
 
+// Required methods
 export const AdminContext = createContext<IUserContextProvider>({
   UserDetails: null,
   finishProvider: false,
   login: () => false,
   logout: () => {},
   addUser: () => {},
+  deleteUser: () => {},
+  editUserPassword: () => {}, 
 });
 
 export const AdminContextProvider = ({
@@ -20,8 +23,9 @@ export const AdminContextProvider = ({
   const [finishProvider, setFinishProvider] = useState(
     localStorage.getItem("isLoggedIn") === "true"
   );
-  const [UserDetails, setUserDetails] = useState<UserDetails[] | null>();
+  const [UserDetails, setUserDetails] = useState<UserDetails[] | null>(null);
 
+  // Load user details from localStorage on component mount
   useEffect(() => {
     const stored = localStorage.getItem("userDetails");
     setUserDetails(
@@ -37,6 +41,7 @@ export const AdminContextProvider = ({
     );
   }, []);
 
+  // Login functionality
   const login = (email: string, password: string): boolean => {
     const user = UserDetails?.find(
       (user) => user.email === email && user.password === password
@@ -50,6 +55,7 @@ export const AdminContextProvider = ({
     return false;
   };
 
+  // Logout functionality
   const logout = () => {
     setFinishProvider(false);
     localStorage.removeItem("isLoggedIn");
@@ -57,6 +63,7 @@ export const AdminContextProvider = ({
     navigate("/login");
   };
 
+  // Add new user
   const addUser = (email: string, password: string) => {
     const newDetail = {
       id: UserDetails ? UserDetails.length + 1 : 1,
@@ -64,8 +71,25 @@ export const AdminContextProvider = ({
       password,
     };
     const newDetails = [...(UserDetails || []), newDetail];
-    setUserDetails((prev) => [...(prev || []), newDetail]);
+    setUserDetails(newDetails);
     localStorage.setItem("userDetails", JSON.stringify(newDetails));
+  };
+
+  // Delete a user by ID
+  const deleteUser = (id: number) => {
+    const updatedDetails = UserDetails?.filter((user) => user.id !== id) || null;
+    setUserDetails(updatedDetails);
+    localStorage.setItem("userDetails", JSON.stringify(updatedDetails));
+  };
+
+  // Edit user password
+  const editUserPassword = (id: number, newPassword: string) => {
+    const updatedDetails =
+      UserDetails?.map((user) =>
+        user.id === id ? { ...user, password: newPassword } : user
+      ) || null;
+    setUserDetails(updatedDetails);
+    localStorage.setItem("userDetails", JSON.stringify(updatedDetails));
   };
 
   return (
@@ -76,6 +100,8 @@ export const AdminContextProvider = ({
         login,
         logout,
         addUser,
+        deleteUser,
+        editUserPassword, 
       }}
     >
       {children}
