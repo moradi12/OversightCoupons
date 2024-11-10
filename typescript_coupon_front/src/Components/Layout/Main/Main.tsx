@@ -36,10 +36,9 @@ export function AllCoupons(): JSX.Element {
         {coupons.length > 0 ? (
           coupons.map((coupon) => (
             <div key={coupon.id} className="coupon-card">
-              <h3>{coupon.title}</h3>
               <p>{coupon.description}</p>
               <p>Price: ${coupon.price}</p>
-              <p>Available: {coupon.isAvailable ? "Yes" : "No"}</p>
+              {/* <p>Available: {coupon.isAvailable ? "Yes" : "No"}</p> */}
             </div>
           ))
         ) : (

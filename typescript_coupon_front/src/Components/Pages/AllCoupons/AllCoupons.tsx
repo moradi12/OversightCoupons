@@ -1,47 +1,68 @@
-// import { useState } from "react";
-// import { useNavigate } from "react-router-dom";
-// import { Coupon } from "../Models/Coupon";
-// import { getAllCoupons } from "../Utils/CouponsCommands";
+import { Component } from "react";
+import "./AllCoupons.css";
+// import axios from "axios"; // Uncomment when integrating backend
 
-// export function AllCoupons(): JSX.Element {
-//     const [coupons, setCoupons] = useState<Coupon[]>([]);
-//     const [purchaseError, setPurchaseError] = useState<string | null>(null);
-//     const navigate = useNavigate();
+// Define the structure of a coupon
+interface Coupon {
+  id: number;
+  title: string;
+  description: string;
+  discount: number;
+  category?: string;
+  price?: number;
+}
+interface AllCouponsState {
+  coupons: Coupon[];
+}
+class AllCoupons extends Component<{}, AllCouponsState> {
+  state: AllCouponsState = {
+    coupons: [],
+  };
 
-//     // useEffect(() => {
-//     //     fetchCoupons();
-//     // }, []);
+  componentDidMount() {
+    this.loadCoupons();
+  }
 
-//     const fetchCoupons = () => {
-//         getAllCoupons()
-//             .then(response => setCoupons(response))
-//             .catch(error => console.error("Error fetching coupons:", error));
-//     };
+  loadCoupons = () => {
+    try {
+      const storedCoupons = localStorage.getItem("coupons");
+      if (storedCoupons) {
+        const coupons = JSON.parse(storedCoupons).map(
+          (coupon: Coupon, index: number) => ({
+            ...coupon,
+            id: coupon.id || index, // Ensure each coupon has a unique ID
+          })
+        );
 
-//     const handleEdit = (couponId: number) => {
-//         navigate(`/editCoupon/${couponId}`);
-//     };
+        this.setState({ coupons });
+        console.log("Coupons loaded from localStorage:", coupons);
+      }
+    } catch (error) {
+      console.error("Error loading coupons:", error);
+    }
+  };
 
-//     return (
-//         <div className="AllCoupons">
-//             <h1>Coupons</h1>
-//             {purchaseError && <p className="error-message">{purchaseError}</p>}
-//             <div className="coupon-list">
-//                 {coupons.map(coupon => (
-//                     <div key={coupon.id} className="coupon-item">
-//                         <button onClick={() => handleEdit(coupon.id)}>Edit</button>
-//                     </div>
-//                 ))}
-//             </div>
-//         </div>
-//     );
-// }
+  render() {
+    const { coupons } = this.state;
 
-
-const AllCoupons = () => {
-  return (
-    <div>AllCoupons</div>
-  )
+    return (
+      <div className="all-coupons-container">
+        <h2>All Coupons</h2>
+        {coupons.length === 0 ? (
+          <p>No coupons available.</p>
+        ) : (
+          <ul className="coupon-list">
+            {coupons.map((coupon) => (
+              <li key={coupon.id} className="coupon-item">
+                <strong>{coupon.title}</strong>: {coupon.description} (
+                {coupon.discount}% off)
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+    );
+  }
 }
 
-export default AllCoupons
+export default AllCoupons;
