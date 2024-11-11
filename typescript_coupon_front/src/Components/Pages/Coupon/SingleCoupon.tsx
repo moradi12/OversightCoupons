@@ -1,20 +1,18 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Coupon } from "../../Models/Coupon";
 import AddCoupon from "../AddCoupon/AddCoupon";
 import { DeleteCoupon } from "../DeleteCoupon/DeleteCoupon";
 
-interface SingleCouponProps {
-  coupon: Coupon;
-  savedCoupons: Coupon[];
-  setSavedCoupons: (coupons: Coupon[]) => void;
-  isAdmin: boolean;
-}
-
-const SingleCoupon: React.FC<SingleCouponProps> = ({
+const SingleCoupon = ({
   coupon,
   savedCoupons,
   setSavedCoupons,
   isAdmin,
+}: {
+  coupon: Coupon;
+  savedCoupons: Coupon[];
+  setSavedCoupons: (coupons: Coupon[]) => void;
+  isAdmin: boolean;
 }) => {
   const [isEdit, setIsEdit] = useState(false);
 
@@ -32,8 +30,8 @@ const SingleCoupon: React.FC<SingleCouponProps> = ({
       </div>
       <div>Amount: {coupon.amount !== undefined ? coupon.amount : "N/A"}</div>
       {coupon.category && <div>Category: {coupon.category}</div>}
-      {coupon.startDate && <div>Start Date: {new Date(coupon.startDate).toLocaleDateString()}</div>}
-      {coupon.endDate && <div>End Date: {new Date(coupon.endDate).toLocaleDateString()}</div>}
+      {coupon.startDate && <div>Start Date: {coupon.startDate.toString()}</div>}
+      {coupon.endDate && <div>End Date: {coupon.endDate.toString()}</div>}
 
       <DeleteCoupon
         couponId={coupon.id}
@@ -44,7 +42,7 @@ const SingleCoupon: React.FC<SingleCouponProps> = ({
       <button onClick={() => setIsEdit(true)}>Edit</button>
       {isEdit && (
         <div>
-          <AddCoupon couponToEdit={coupon} creatorUserId={0} />
+          <AddCoupon couponToEdit={coupon} />
           <button onClick={() => setIsEdit(false)}>Cancel</button>
         </div>
       )}
