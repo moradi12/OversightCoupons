@@ -1,10 +1,10 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { Coupon } from "../../Models/Coupon";
+import { notify } from "../../Utils/notif";
 import "./AddCoupon.css";
 
-const AddCoupon = () => {
-  const [newCoupon, setNewCoupon] = useState<Coupon>({
+const AddCoupon = ({ couponToEdit }: { couponToEdit: Coupon | null }) => {
+  const blankCoupon: Coupon = {
     id: 0,
     title: "",
     category: "",
@@ -24,7 +24,11 @@ const AddCoupon = () => {
     maxUsage: 1,
     currentUsage: 0,
     isAvailable: true,
-  });
+  };
+
+  const [newCoupon, setNewCoupon] = useState<Coupon>(
+    couponToEdit ? couponToEdit : blankCoupon
+  );
 
   const [savedCoupons, setSavedCoupons] = useState<Coupon[]>([]);
 
@@ -32,58 +36,73 @@ const AddCoupon = () => {
     const { name, description, discount, price, discountType } = newCoupon;
 
     if (!name.trim() || !description?.trim()) {
-      alert("Name and Description are required");
+      notify.error("Name and Description are required");
       return false;
     }
 
     if (discountType === "Percentage" && (discount! <= 0 || discount! > 100)) {
-      alert("Discount percentage must be between 1 and 100");
+      notify.error("Discount percentage must be between 1 and 100");
       return false;
     }
 
     if (discountType === "Amount" && discount! <= 0) {
-      alert("Discount amount must be greater than 0");
+      notify.error("Discount amount must be greater than 0");
       return false;
     }
 
     if (price <= 0) {
-      alert("Price must be greater than 0");
+      notify.error("Price must be greater than 0");
       return false;
     }
 
     return true;
   };
 
+  const changeCoupon = () => {
+    console.log(couponToEdit);
+    const couponsAfterUpdate = savedCoupons.map((coupon) =>
+      coupon.id === couponToEdit?.id ? newCoupon : coupon
+    );
+    console.log(couponsAfterUpdate);
+    setSavedCoupons(couponsAfterUpdate);
+    localStorage.setItem("coupons", JSON.stringify(couponsAfterUpdate));
+    notify.success("Coupon updated successfully!");
+  };
+
+  const addCoupon = () => {
+    const updatedCoupons = [...savedCoupons, newCoupon];
+    setSavedCoupons(updatedCoupons);
+    localStorage.setItem("coupons", JSON.stringify(updatedCoupons));
+    setNewCoupon({
+      ...newCoupon,
+      name: "",
+      description: "",
+      discount: 0,
+      price: 0,
+    });
+    notify.success("Coupon added successfully!");
+  };
+
   const handleSaveCoupon = async () => {
     if (!validateCoupon()) return;
 
     try {
-      const updatedCoupons = [...savedCoupons, newCoupon];
-      setSavedCoupons(updatedCoupons);
-      localStorage.setItem("coupons", JSON.stringify(updatedCoupons));
-      await saveCouponToServer(newCoupon);
-      alert("Coupon added successfully!");
-      setNewCoupon({
-        ...newCoupon,
-        name: "",
-        description: "",
-        discount: 0,
-        price: 0,
-      });
+      couponToEdit ? changeCoupon() : addCoupon();
+      // await saveCouponToServer(newCoupon);
     } catch (error) {
       console.error("Failed to save coupon:", error);
-      alert("Failed to save coupon. Please try again");
+      notify.error("Failed to save coupon. Please try again");
     }
   };
 
-  const saveCouponToServer = async (coupon: Coupon) => {
-    try {
-      const response = await axios.post("/coupons", coupon);
-      console.log("Coupon saved to server:", response.data);
-    } catch (error) {
-      console.error("Failed to save coupon to server:", error);
-    }
-  };
+  // const saveCouponToServer = async (coupon: Coupon) => {
+  //   try {
+  //     const response = await axios.post("/coupons", coupon);
+  //     console.log("Coupon saved to server:", response.data);
+  //   } catch (error) {
+  //     console.error("Failed to save coupon to server:", error);
+  //   }
+  // };
 
   useEffect(() => {
     const storedCoupons = localStorage.getItem("coupons");
@@ -179,7 +198,7 @@ const AddCoupon = () => {
         <label className="input-label">Start Date</label>
         <input
           type="date"
-          value={newCoupon.startDate.toISOString().split("T")[0]}
+          value={newCoupon.startDate.toString().split("T")[0]}
           onChange={(e) =>
             setNewCoupon({ ...newCoupon, startDate: new Date(e.target.value) })
           }
@@ -189,7 +208,7 @@ const AddCoupon = () => {
         <input
           type="date"
           placeholder="Enter the end date"
-          value={newCoupon.endDate?.toISOString().split("T")[0] || ""}
+          value={newCoupon.endDate?.toString().split("T")[0] || ""}
           onChange={(e) =>
             setNewCoupon({ ...newCoupon, endDate: new Date(e.target.value) })
           }

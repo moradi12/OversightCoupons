@@ -15,11 +15,14 @@ export function MainRoute(): JSX.Element {
         {/* Protected Routes */}
         <Route element={<ProtectedRoutes />}>
           <Route path="/admin/add" element={<AddCustomer />} />
-          <Route path="/admin/coupon/add" element={<AddCoupon />} />
           <Route path="/all/customers" element={<AllCustomers />} />
         </Route>
 
         {/* Public Routes */}
+        <Route
+          path="/admin/coupon/add"
+          element={<AddCoupon couponToEdit={null} />}
+        />
         <Route path="/" element={<Main />} />
         <Route path="/all" element={<AllCoupons />} />
         <Route path="/login" element={<Login />} />
