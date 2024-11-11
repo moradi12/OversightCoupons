@@ -14,15 +14,15 @@ const blankCoupon: Coupon = {
   startDate: new Date(),
   endDate: undefined,
   price: 0,
-  createdByUserId: 1, // Default or set as needed
+  createdByUserId: 1, 
   amount: 0,
-  isCombinable: true, // Default to true
-  creationDate: new Date(), // Set to current date
+  isCombinable: true,
+  creationDate: new Date(), 
   image: null,
-  code: "", // Will be generated automatically
-  maxUsage: 1, // Default to 1
-  currentUsage: 0, // Default to 0
-  isAvailable: true, // Default to true
+  code: "", 
+  maxUsage: 1, 
+  currentUsage: 0,
+  isAvailable: true, 
 };
 
 const AddCoupon = ({ couponToEdit }: { couponToEdit: Coupon | null }) => {
@@ -58,7 +58,7 @@ const AddCoupon = ({ couponToEdit }: { couponToEdit: Coupon | null }) => {
       isUnique = !savedCoupons.some((coupon) => coupon.code === code);
     }
 
-    return code; // Now code is always a string
+    return code; //  code is always a string
   };
 
   const validateCoupon = (): boolean => {
@@ -129,15 +129,15 @@ const AddCoupon = ({ couponToEdit }: { couponToEdit: Coupon | null }) => {
           ? savedCoupons[savedCoupons.length - 1].id + 1
           : 1,
       code: generateUniqueCode(), // Automatically generate a unique code
-      creationDate: new Date(), // Set creation date to now
-      currentUsage: 0, // Initialize current usage
+      creationDate: new Date(), 
+      currentUsage: 0, // Initialize current usage!
     };
     setSavedCoupons([...savedCoupons, newCouponWithId]);
     localStorage.setItem(
       "coupons",
       JSON.stringify([...savedCoupons, newCouponWithId])
     );
-    setNewCoupon({ ...blankCoupon }); // Reset to blank coupon
+    setNewCoupon({ ...blankCoupon });
     notify.success("Coupon added successfully!");
   };
 
@@ -276,7 +276,7 @@ const AddCoupon = ({ couponToEdit }: { couponToEdit: Coupon | null }) => {
           className="input-field"
         />
 
-        {/* Is Available */}
+        Is Available
         <label className="input-label">Is Available</label>
         <input
           type="checkbox"

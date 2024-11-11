@@ -42,7 +42,11 @@ export class Coupon {
     maxUsage,
     currentUsage = 0,
     category,
-  }: {
+    
+  }: 
+  
+  
+  {
     title: string;
     id: number;
     name: string;

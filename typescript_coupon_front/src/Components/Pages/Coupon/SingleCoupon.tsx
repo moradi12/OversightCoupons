@@ -1,7 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Coupon } from "../../Models/Coupon";
+import { handleCouponPurchase } from "../../Utils/CouponActions";
+import { getCouponsFromLocalStorage } from "../../Utils/LocalStorageUtils";
+import { notify } from "../../Utils/notif";
 import AddCoupon from "../AddCoupon/AddCoupon";
 import { DeleteCoupon } from "../DeleteCoupon/DeleteCoupon";
+import CouponDetails from "./CouponDetails";
 
 const SingleCoupon = ({
   coupon,
@@ -15,78 +19,84 @@ const SingleCoupon = ({
   isAdmin: boolean;
 }) => {
   const [isEdit, setIsEdit] = useState(false);
+  const [purchased, setPurchased] = useState<boolean>(false);
+
+  // Load coupons from local storage on mount
+  useEffect(() => {
+    const loadedCoupons = getCouponsFromLocalStorage();
+    setSavedCoupons(loadedCoupons);
+  }, [setSavedCoupons]);
+
+  const handleBuyCoupon = async () => {
+    try {
+      if (coupon.amount > 0 && coupon.isAvailable) {
+        await handleCouponPurchase(coupon, savedCoupons, setSavedCoupons);
+        notify.success("Coupon purchased successfully!");
+
+        // Mark the coupon as purchased so it can be displayed to the user
+        setPurchased(true);
+      } else {
+        notify.error("Coupon is out of stock or not available!");
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        notify.error(error.message || "An unexpected error occurred.");
+      } else {
+        notify.error("An unexpected error occurred.");
+      }
+    }
+  };
 
   return (
     <li key={coupon.id} className="coupon-item">
-      {/* Coupon Basic Information */}
-      <div>
-        <strong>{coupon.name}</strong> - <strong>{coupon.title}</strong> -{" "}
-        <strong>ID: {coupon.id}</strong>
-      </div>
+      {/* Coupon Details Component */}
+      <CouponDetails coupon={coupon} isAdmin={isAdmin} />
 
-      {/* Description (only for admin) */}
-      {isAdmin && <div>Description: {coupon.description}</div>}
-
-      {/* Display Discount Information */}
-      <div>Discount Type: {coupon.discountType || "Percentage"}</div>
-      <div>
-        Discount:{" "}
-        {coupon.discountType === "Percentage"
-          ? `${coupon.discount}%`
-          : `$${coupon.discount}`}
-      </div>
-
-      {/* Price and Amount */}
-      <div>
-        Price: ${coupon.price !== undefined ? coupon.price : "Not Available"}
-      </div>
-      <div>Amount: {coupon.amount !== undefined ? coupon.amount : "N/A"}</div>
-
-      {/* Category */}
-      {coupon.category && <div>Category: {coupon.category}</div>}
-
-      {/* Dates */}
-      {coupon.startDate && (
-        <div>
-          Start Date: {new Date(coupon.startDate).toLocaleDateString()}
-        </div>
-      )}
-      {coupon.endDate && (
-        <div>
-          End Date: {new Date(coupon.endDate).toLocaleDateString()}
-        </div>
+      {/* Delete Coupon button - Admin only */}
+      {isAdmin && (
+        <DeleteCoupon
+          couponId={coupon.id}
+          savedCoupons={savedCoupons}
+          setSavedCoupons={setSavedCoupons}
+        />
       )}
 
-      {/* Display Coupon Code */}
-      <div>Code: {coupon.code}</div>
-
-      {/* New Fields */}
-      <div>Is Combinable: {coupon.isCombinable ? "Yes" : "No"}</div>
-      <div>Max Usage: {coupon.maxUsage}</div>
-      <div>Current Usage: {coupon.currentUsage}</div>
-      <div>Is Available: {coupon.isAvailable ? "Yes" : "No"}</div>
-      <div>Created By User ID: {coupon.createdByUserId}</div>
-
-      {/* Display Creation Date */}
-      {coupon.creationDate && (
-        <div>
-          Creation Date: {new Date(coupon.creationDate).toLocaleString()}
-        </div>
+      {/* Edit Coupon button - Admin only */}
+      {isAdmin && (
+        <>
+          <button onClick={() => setIsEdit(true)}>Edit</button>
+          {isEdit && (
+            <div>
+              <AddCoupon couponToEdit={coupon} />
+              <button onClick={() => setIsEdit(false)}>Cancel</button>
+            </div>
+          )}
+        </>
       )}
 
-      {/* Delete Coupon */}
-      <DeleteCoupon
-        couponId={coupon.id}
-        savedCoupons={savedCoupons}
-        setSavedCoupons={setSavedCoupons}
-      />
+      {/* Buy Coupon button */}
+      <button
+        className="bg-green-500 text-white font-bold py-2 px-4 rounded hover:bg-green-600 mt-2"
+        onClick={handleBuyCoupon}
+      >
+        Buy Coupon
+      </button>
 
-      {/* Edit Coupon */}
-      <button onClick={() => setIsEdit(true)}>Edit</button>
-      {isEdit && (
-        <div>
-          <AddCoupon couponToEdit={coupon} />
-          <button onClick={() => setIsEdit(false)}>Cancel</button>
+      {/* Display coupon code logic */}
+      {isAdmin ? (
+        // Show the code to admin
+        <div className="mt-4">
+          <strong>Coupon Code:</strong> {coupon.code}
+        </div>
+      ) : purchased ? (
+        // Show the code to the user after purchase
+        <div className="mt-4 text-green-700">
+          <strong>Coupon Code:</strong> {coupon.code}
+        </div>
+      ) : (
+        // Message to non-admin users who haven't purchased yet
+        <div className="mt-4 text-red-700">
+          You need to buy this coupon to get the code.
         </div>
       )}
     </li>

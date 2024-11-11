@@ -106,3 +106,17 @@ export async function getCouponsByDateRange(startDate, endDate) {
     throw new Error(error.response?.data || `Failed to fetch coupons by date range`);
   }
 }
+
+
+/**
+ * Purchase coupon
+ */
+export async function purchaseCoupon(couponId) {
+  try {
+    const response = await api.post(`/coupons/purchase/${couponId}`);
+    return response.data;
+  } catch (error) {
+    console.error(`Error purchasing coupon with ID ${couponId}: ${error.response?.data || error.message}`);
+    throw new Error(error.response?.data || `Failed to purchase coupon with ID ${couponId}`);
+  }
+}
