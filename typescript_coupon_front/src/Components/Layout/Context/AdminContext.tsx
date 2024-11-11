@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import IUserContextProvider from "../../Models/IUserContextProvider";
 import { UserDetails } from "../../Models/UserDetails";
 
-// Required methods
 export const AdminContext = createContext<IUserContextProvider>({
   UserDetails: null,
   finishProvider: false,
@@ -40,6 +39,8 @@ export const AdminContextProvider = ({
           ]
     );
   }, []);
+
+  
 
   // Save user details to local storage whenever they change
   useEffect(() => {

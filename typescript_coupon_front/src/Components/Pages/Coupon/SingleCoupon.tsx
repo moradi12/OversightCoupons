@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { Coupon } from "../../Models/Coupon";
-import { deleteCoupon } from "../../Utils/CouponsCommands";
 import AddCoupon from "../AddCoupon/AddCoupon";
+import { DeleteCoupon } from "../DeleteCoupon/DeleteCoupon";
 
-const SingleCoupon = ({ coupon }: { coupon: Coupon }) => {
+const SingleCoupon = ({ coupon, savedCoupons, setSavedCoupons }: { coupon: Coupon; savedCoupons: Coupon[]; setSavedCoupons: (coupons: Coupon[]) => void }) => {
   const [isEdit, setIsEdit] = useState(false);
+  
   return (
     <li key={coupon.id} className="coupon-item">
       <div>
@@ -20,7 +21,10 @@ const SingleCoupon = ({ coupon }: { coupon: Coupon }) => {
       {coupon.category && <div>Category: {coupon.category}</div>}
       {coupon.startDate && <div>Start Date: {coupon.startDate.toString()}</div>}
       {coupon.endDate && <div>End Date: {coupon.endDate.toString()}</div>}
-      <button onClick={() => deleteCoupon(coupon.id)}>Delete</button>
+      
+
+      <DeleteCoupon couponId={coupon.id} savedCoupons={savedCoupons} setSavedCoupons={setSavedCoupons} />
+      
       <button onClick={() => setIsEdit(true)}>Edit</button>
       {isEdit && (
         <div>

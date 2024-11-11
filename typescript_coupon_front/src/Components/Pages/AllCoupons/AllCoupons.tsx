@@ -17,7 +17,7 @@ const AllCoupons: React.FC = () => {
         const parsedCoupons: Coupon[] = JSON.parse(storedCoupons).map(
           (coupon: Coupon, index: number) => ({
             ...coupon,
-            id: coupon.id || index, // Ensure each coupon has a unique ID
+            id: coupon.id || index, 
           })
         );
         setCoupons(parsedCoupons);
@@ -36,7 +36,12 @@ const AllCoupons: React.FC = () => {
       ) : (
         <ul className="coupon-list">
           {coupons.map((coupon) => (
-            <SingleCoupon coupon={coupon} />
+            <SingleCoupon
+              key={coupon.id}
+              coupon={coupon}
+              savedCoupons={coupons}
+              setSavedCoupons={setCoupons}
+            />
           ))}
         </ul>
       )}
