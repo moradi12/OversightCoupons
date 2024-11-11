@@ -57,8 +57,10 @@ const SingleCoupon = ({
         </div>
       )}
 
-      {/* New Fields */}
+      {/* Display Coupon Code */}
       <div>Code: {coupon.code}</div>
+
+      {/* New Fields */}
       <div>Is Combinable: {coupon.isCombinable ? "Yes" : "No"}</div>
       <div>Max Usage: {coupon.maxUsage}</div>
       <div>Current Usage: {coupon.currentUsage}</div>

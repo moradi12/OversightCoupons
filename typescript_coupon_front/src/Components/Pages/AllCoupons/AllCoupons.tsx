@@ -26,22 +26,18 @@ const AllCoupons: React.FC = () => {
               coupon.isCombinable !== undefined ? coupon.isCombinable : true,
             creationDate: coupon.creationDate
               ? new Date(coupon.creationDate)
-              : new Date(),
-            code: coupon.code || "",
-            maxUsage: coupon.maxUsage || 1,
-            currentUsage: coupon.currentUsage || 0,
-            isAvailable:
-              coupon.isAvailable !== undefined ? coupon.isAvailable : true,
+              : undefined,
+            startDate: coupon.startDate ? new Date(coupon.startDate) : new Date(),
+            endDate: coupon.endDate ? new Date(coupon.endDate) : undefined,
+            // ... [other fields]
           })
         );
         setCoupons(parsedCoupons);
-        console.log("Coupons loaded from localStorage:", parsedCoupons);
       }
     } catch (error) {
       console.error("Error loading coupons:", error);
     }
   };
-
   return (
     <div className="all-coupons-container">
       <h2>All Coupons</h2>

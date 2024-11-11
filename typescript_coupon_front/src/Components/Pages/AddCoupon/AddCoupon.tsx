@@ -1,4 +1,3 @@
-// AddCoupon.tsx
 import { useEffect, useState } from "react";
 import { Coupon } from "../../Models/Coupon";
 import { notify } from "../../Utils/notif";
@@ -15,27 +14,52 @@ const blankCoupon: Coupon = {
   startDate: new Date(),
   endDate: undefined,
   price: 0,
-  createdByUserId: 1,
+  createdByUserId: 1, // Default or set as needed
   amount: 0,
-  isCombinable: true, 
-  creationDate: new Date(),
+  isCombinable: true, // Default to true
+  creationDate: new Date(), // Set to current date
   image: null,
-  code: "",
-  maxUsage: 1, 
-  currentUsage: 0, 
-  isAvailable: true, 
+  code: "", // Will be generated automatically
+  maxUsage: 1, // Default to 1
+  currentUsage: 0, // Default to 0
+  isAvailable: true, // Default to true
 };
 
 const AddCoupon = ({ couponToEdit }: { couponToEdit: Coupon | null }) => {
   const [newCoupon, setNewCoupon] = useState<Coupon>(
-    couponToEdit ? { ...couponToEdit } : { ...blankCoupon }
+    couponToEdit
+      ? {
+          ...couponToEdit,
+          startDate: couponToEdit.startDate ? new Date(couponToEdit.startDate) : new Date(),
+          endDate: couponToEdit.endDate ? new Date(couponToEdit.endDate) : undefined,
+        }
+      : { ...blankCoupon }
   );
+
   const [savedCoupons, setSavedCoupons] = useState<Coupon[]>([]);
 
   useEffect(() => {
     const storedCoupons = localStorage.getItem("coupons");
     if (storedCoupons) setSavedCoupons(JSON.parse(storedCoupons));
   }, []);
+
+  const generateUniqueCode = (): string => {
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    let code: string = ''; // Explicitly type and initialize code
+    let isUnique = false;
+
+    while (!isUnique) {
+      const codeLength = Math.floor(Math.random() * 2) + 4; // Random length between 4 and 5
+      code = '';
+      for (let i = 0; i < codeLength; i++) {
+        code += characters.charAt(Math.floor(Math.random() * characters.length));
+      }
+      // Check if the code is unique among saved coupons
+      isUnique = !savedCoupons.some((coupon) => coupon.code === code);
+    }
+
+    return code; // Now code is always a string
+  };
 
   const validateCoupon = (): boolean => {
     const {
@@ -54,7 +78,10 @@ const AddCoupon = ({ couponToEdit }: { couponToEdit: Coupon | null }) => {
       return false;
     }
 
-    if (discountType === "Percentage" && (discount! <= 0 || discount! > 100)) {
+    if (
+      discountType === "Percentage" &&
+      (discount! <= 0 || discount! > 100)
+    ) {
       notify.error("Discount percentage must be between 1 and 100");
       return false;
     }
@@ -86,7 +113,7 @@ const AddCoupon = ({ couponToEdit }: { couponToEdit: Coupon | null }) => {
   const changeCoupon = () => {
     const couponsAfterUpdate = savedCoupons.map((coupon) =>
       coupon.id === couponToEdit?.id
-        ? { ...newCoupon, creationDate: coupon.creationDate } // Preserve original creationDate
+        ? { ...newCoupon, code: coupon.code, creationDate: coupon.creationDate } // Preserve code and creationDate
         : coupon
     );
     setSavedCoupons(couponsAfterUpdate);
@@ -101,6 +128,7 @@ const AddCoupon = ({ couponToEdit }: { couponToEdit: Coupon | null }) => {
         savedCoupons.length > 0
           ? savedCoupons[savedCoupons.length - 1].id + 1
           : 1,
+      code: generateUniqueCode(), // Automatically generate a unique code
       creationDate: new Date(), // Set creation date to now
       currentUsage: 0, // Initialize current usage
     };
@@ -109,7 +137,7 @@ const AddCoupon = ({ couponToEdit }: { couponToEdit: Coupon | null }) => {
       "coupons",
       JSON.stringify([...savedCoupons, newCouponWithId])
     );
-    setNewCoupon({ ...blankCoupon }); 
+    setNewCoupon({ ...blankCoupon }); // Reset to blank coupon
     notify.success("Coupon added successfully!");
   };
 
@@ -230,16 +258,6 @@ const AddCoupon = ({ couponToEdit }: { couponToEdit: Coupon | null }) => {
               isCombinable: e.target.checked,
             })
           }
-          className="input-field"
-        />
-
-        {/* Code */}
-        <label className="input-label">Code</label>
-        <input
-          type="text"
-          placeholder="Enter the coupon code"
-          value={newCoupon.code}
-          onChange={(e) => setNewCoupon({ ...newCoupon, code: e.target.value })}
           className="input-field"
         />
 
