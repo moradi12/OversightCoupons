@@ -3,34 +3,38 @@ import { Coupon } from "../../Models/Coupon";
 import { notify } from "../../Utils/notif";
 import "./AddCoupon.css";
 
+const blankCoupon: Coupon = {
+  id: 0,
+  title: "",
+  category: "",
+  name: "",
+  description: "",
+  discountType: "Percentage",
+  discount: 0,
+  startDate: new Date(),
+  endDate: undefined,
+  price: 0,
+  createdByUserId: 1,
+  amount: 0,
+  isCombinable: true,
+  creationDate: new Date(),
+  image: null,
+  code: "",
+  maxUsage: 1,
+  currentUsage: 0,
+  isAvailable: true,
+};
+
 const AddCoupon = ({ couponToEdit }: { couponToEdit: Coupon | null }) => {
-  const blankCoupon: Coupon = {
-    id: 0,
-    title: "",
-    category: "",
-    name: "",
-    description: "",
-    discountType: "Percentage",
-    discount: 0,
-    startDate: new Date(),
-    endDate: undefined,
-    price: 0,
-    createdByUserId: 1,
-    amount: 0,
-    isCombinable: true,
-    creationDate: new Date(),
-    image: null,
-    code: "",
-    maxUsage: 1,
-    currentUsage: 0,
-    isAvailable: true,
-  };
-
   const [newCoupon, setNewCoupon] = useState<Coupon>(
-    couponToEdit ? couponToEdit : blankCoupon
+    couponToEdit || blankCoupon
   );
-
   const [savedCoupons, setSavedCoupons] = useState<Coupon[]>([]);
+
+  useEffect(() => {
+    const storedCoupons = localStorage.getItem("coupons");
+    if (storedCoupons) setSavedCoupons(JSON.parse(storedCoupons));
+  }, []);
 
   const validateCoupon = (): boolean => {
     const { name, description, discount, price, discountType } = newCoupon;
@@ -59,59 +63,45 @@ const AddCoupon = ({ couponToEdit }: { couponToEdit: Coupon | null }) => {
   };
 
   const changeCoupon = () => {
-    console.log(couponToEdit);
     const couponsAfterUpdate = savedCoupons.map((coupon) =>
       coupon.id === couponToEdit?.id ? newCoupon : coupon
     );
-    console.log(couponsAfterUpdate);
     setSavedCoupons(couponsAfterUpdate);
     localStorage.setItem("coupons", JSON.stringify(couponsAfterUpdate));
     notify.success("Coupon updated successfully!");
   };
 
   const addCoupon = () => {
-    const updatedCoupons = [...savedCoupons, newCoupon];
-    setSavedCoupons(updatedCoupons);
-    localStorage.setItem("coupons", JSON.stringify(updatedCoupons));
-    setNewCoupon({
+    const newCouponWithId ={
       ...newCoupon,
-      name: "",
-      description: "",
-      discount: 0,
-      price: 0,
-    });
+      id:
+        savedCoupons.length > 0
+          ? savedCoupons[savedCoupons.length - 1].id + 1
+          : 1,
+    }
+    setSavedCoupons([...savedCoupons, newCouponWithId]);
+    localStorage.setItem(
+      "coupons",
+      JSON.stringify([...savedCoupons, newCouponWithId])
+    );
+    setNewCoupon(blankCoupon); // Reset to blank coupon
     notify.success("Coupon added successfully!");
   };
 
-  const handleSaveCoupon = async () => {
+  const handleSaveCoupon = () => {
     if (!validateCoupon()) return;
 
     try {
       couponToEdit ? changeCoupon() : addCoupon();
-      // await saveCouponToServer(newCoupon);
     } catch (error) {
       console.error("Failed to save coupon:", error);
       notify.error("Failed to save coupon. Please try again");
     }
   };
 
-  // const saveCouponToServer = async (coupon: Coupon) => {
-  //   try {
-  //     const response = await axios.post("/coupons", coupon);
-  //     console.log("Coupon saved to server:", response.data);
-  //   } catch (error) {
-  //     console.error("Failed to save coupon to server:", error);
-  //   }
-  // };
-
-  useEffect(() => {
-    const storedCoupons = localStorage.getItem("coupons");
-    if (storedCoupons) setSavedCoupons(JSON.parse(storedCoupons));
-  }, []);
-
   return (
     <div className="add-coupon-container">
-      <h2>Add New Coupon</h2>
+      <h2>{couponToEdit ? "Edit Coupon" : "Add New Coupon"}</h2>
       <form
         onSubmit={(e) => {
           e.preventDefault();
@@ -215,7 +205,7 @@ const AddCoupon = ({ couponToEdit }: { couponToEdit: Coupon | null }) => {
           className="input-field"
         />
         <button type="submit" className="action-button save">
-          Save Coupon
+          {couponToEdit ? "Update Coupon" : "Save Coupon"}
         </button>
       </form>
     </div>
