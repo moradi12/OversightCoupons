@@ -12,7 +12,7 @@ const blankCoupon: Coupon = {
   discountType: "Percentage",
   discount: 0,
   startDate: new Date(),
-  endDate: undefined,
+  endDate: undefined,  // Allow undefined for coupons with no end date
   price: 0,
   createdByUserId: 1,
   amount: 0,
@@ -37,7 +37,7 @@ const AddCoupon = ({ couponToEdit }: { couponToEdit: Coupon | null }) => {
   }, []);
 
   const validateCoupon = (): boolean => {
-    const { name, description, discount, price, discountType } = newCoupon;
+    const { name, description, discount, price, discountType, startDate, endDate } = newCoupon;
 
     if (!name.trim() || !description?.trim()) {
       notify.error("Name and Description are required");
@@ -59,6 +59,12 @@ const AddCoupon = ({ couponToEdit }: { couponToEdit: Coupon | null }) => {
       return false;
     }
 
+    // Ensure the end date is not before the start date
+    if (endDate && endDate < startDate) {
+      notify.error("End date cannot be before the start date");
+      return false;
+    }
+
     return true;
   };
 
@@ -72,19 +78,19 @@ const AddCoupon = ({ couponToEdit }: { couponToEdit: Coupon | null }) => {
   };
 
   const addCoupon = () => {
-    const newCouponWithId ={
+    const newCouponWithId = {
       ...newCoupon,
       id:
         savedCoupons.length > 0
           ? savedCoupons[savedCoupons.length - 1].id + 1
           : 1,
-    }
+    };
     setSavedCoupons([...savedCoupons, newCouponWithId]);
     localStorage.setItem(
       "coupons",
       JSON.stringify([...savedCoupons, newCouponWithId])
     );
-    setNewCoupon(blankCoupon); // Reset to blank coupon
+    setNewCoupon(blankCoupon); 
     notify.success("Coupon added successfully!");
   };
 
@@ -188,22 +194,28 @@ const AddCoupon = ({ couponToEdit }: { couponToEdit: Coupon | null }) => {
         <label className="input-label">Start Date</label>
         <input
           type="date"
-          value={newCoupon.startDate.toString().split("T")[0]}
+          value={newCoupon.startDate.toISOString().split("T")[0]} // Use ISO string for consistency
           onChange={(e) =>
             setNewCoupon({ ...newCoupon, startDate: new Date(e.target.value) })
           }
           className="input-field"
         />
+
         <label className="input-label">End Date</label>
         <input
           type="date"
           placeholder="Enter the end date"
-          value={newCoupon.endDate?.toString().split("T")[0] || ""}
+          value={newCoupon.endDate?.toISOString().split("T")[0] || ""}
           onChange={(e) =>
-            setNewCoupon({ ...newCoupon, endDate: new Date(e.target.value) })
+            setNewCoupon({
+              ...newCoupon,
+              endDate: e.target.value ? new Date(e.target.value) : undefined,
+            })
           }
           className="input-field"
+          min={newCoupon.startDate.toISOString().split("T")[0]} // Prevent end date from being before start date!!
         />
+
         <button type="submit" className="action-button save">
           {couponToEdit ? "Update Coupon" : "Save Coupon"}
         </button>
