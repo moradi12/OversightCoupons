@@ -1,21 +1,7 @@
 import { useEffect, useState } from "react";
-import { notify } from "../../Utils/notif";
+import { Coupon } from "../../Models/Coupon";
+import SingleCoupon from "../Coupon/SingleCoupon";
 import "./AllCoupons.css";
-
-// Define the structure of a coupon
-interface Coupon {
-  id: number;
-  name: string;
-  title: string;
-  description: string;
-  discount: number;
-  discountType?: string;
-  category?: string;
-  price?: number;
-  amount?: number;
-  startDate?: string;
-  endDate?: string;
-}
 
 const AllCoupons: React.FC = () => {
   const [coupons, setCoupons] = useState<Coupon[]>([]);
@@ -42,19 +28,6 @@ const AllCoupons: React.FC = () => {
     }
   };
 
-  const deleteCoupon = (id: number) => {
-    try {
-      const updatedCoupons = coupons.filter((coupon) => coupon.id !== id);
-      setCoupons(updatedCoupons);
-      localStorage.setItem("coupons", JSON.stringify(updatedCoupons));
-      notify.success(`Coupon with id ${id} deleted successfully`);
-      console.log(`Coupon with id ${id} deleted`);
-    } catch (error) {
-      notify.error(`Failed to delete coupon with id ${id}`);
-      console.error("Error deleting coupon:", error);
-    }
-  };
-
   return (
     <div className="all-coupons-container">
       <h2>All Coupons</h2>
@@ -63,20 +36,7 @@ const AllCoupons: React.FC = () => {
       ) : (
         <ul className="coupon-list">
           {coupons.map((coupon) => (
-            <li key={coupon.id} className="coupon-item">
-              <div>
-                <strong>{coupon.name}</strong> - <strong>{coupon.title}</strong>
-              </div>
-              <div>Description: {coupon.description}</div>
-              <div>Discount Type: {coupon.discountType || "Percentage"}</div>
-              <div>Discount: {coupon.discount}%</div>
-              <div>Price: ${coupon.price !== undefined ? coupon.price : "Not Available"}</div>
-              <div>Amount: {coupon.amount !== undefined ? coupon.amount : "N/A"}</div>
-              {coupon.category && <div>Category: {coupon.category}</div>}
-              {coupon.startDate && <div>Start Date: {coupon.startDate}</div>}
-              {coupon.endDate && <div>End Date: {coupon.endDate}</div>}
-              <button onClick={() => deleteCoupon(coupon.id)}>Delete</button>
-            </li>
+            <SingleCoupon coupon={coupon} />
           ))}
         </ul>
       )}

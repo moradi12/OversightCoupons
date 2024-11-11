@@ -1,26 +1,29 @@
 import { CouponUtils } from "../Utils/CouponUtils";
 
 export class Coupon {
+  title: string;
   id: number;
   name: string;
-  description?: string; 
-  createdByUserId: number; 
-  creationDate: Date; 
+  description?: string;
+  createdByUserId: number;
+  creationDate: Date;
   discountType?: "Amount" | "Percentage";
-  discount?: number; 
-  expirationDate?: Date; 
-  code: string; 
-  isCombinable: boolean; 
-  maxUsage: number; 
-  currentUsage: number; 
-  amount: number; 
-  price: number; 
-  startDate: Date; 
+  discount?: number;
+  expirationDate?: Date;
+  code: string;
+  isCombinable: boolean;
+  maxUsage: number;
+  currentUsage: number;
+  amount: number;
+  price: number;
+  startDate: Date;
   endDate?: Date;
-  image: any; 
+  image: any;
   isAvailable: boolean;
+  category: any;
 
   constructor({
+    title,
     id,
     name,
     description,
@@ -38,6 +41,7 @@ export class Coupon {
     maxUsage,
     currentUsage = 0,
   }: {
+    title: string;
     id: number;
     name: string;
     description?: string;
@@ -55,6 +59,7 @@ export class Coupon {
     maxUsage: number;
     currentUsage?: number;
   }) {
+    this.title = title;
     this.id = id;
     this.name = name;
     this.description = description;
@@ -71,6 +76,6 @@ export class Coupon {
     this.maxUsage = maxUsage;
     this.currentUsage = currentUsage;
     this.code = code || CouponUtils.generateCode();
-    this.isAvailable = CouponUtils.calculateAvailability(this); 
+    this.isAvailable = CouponUtils.calculateAvailability(this);
   }
 }

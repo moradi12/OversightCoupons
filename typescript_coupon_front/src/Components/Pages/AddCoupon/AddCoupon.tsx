@@ -6,6 +6,8 @@ import "./AddCoupon.css";
 const AddCoupon = () => {
   const [newCoupon, setNewCoupon] = useState<Coupon>({
     id: 0,
+    title: "",
+    category: "",
     name: "",
     description: "",
     discountType: "Percentage",
