@@ -1,3 +1,4 @@
+// AddCoupon.tsx
 import { useEffect, useState } from "react";
 import { Coupon } from "../../Models/Coupon";
 import { notify } from "../../Utils/notif";
@@ -12,22 +13,22 @@ const blankCoupon: Coupon = {
   discountType: "Percentage",
   discount: 0,
   startDate: new Date(),
-  endDate: undefined,  // Allow undefined for coupons with no end date
+  endDate: undefined,
   price: 0,
   createdByUserId: 1,
   amount: 0,
-  isCombinable: true,
+  isCombinable: true, 
   creationDate: new Date(),
   image: null,
   code: "",
-  maxUsage: 1,
-  currentUsage: 0,
-  isAvailable: true,
+  maxUsage: 1, 
+  currentUsage: 0, 
+  isAvailable: true, 
 };
 
 const AddCoupon = ({ couponToEdit }: { couponToEdit: Coupon | null }) => {
   const [newCoupon, setNewCoupon] = useState<Coupon>(
-    couponToEdit || blankCoupon
+    couponToEdit ? { ...couponToEdit } : { ...blankCoupon }
   );
   const [savedCoupons, setSavedCoupons] = useState<Coupon[]>([]);
 
@@ -37,7 +38,16 @@ const AddCoupon = ({ couponToEdit }: { couponToEdit: Coupon | null }) => {
   }, []);
 
   const validateCoupon = (): boolean => {
-    const { name, description, discount, price, discountType, startDate, endDate } = newCoupon;
+    const {
+      name,
+      description,
+      discount,
+      price,
+      discountType,
+      startDate,
+      endDate,
+      maxUsage,
+    } = newCoupon;
 
     if (!name.trim() || !description?.trim()) {
       notify.error("Name and Description are required");
@@ -59,9 +69,14 @@ const AddCoupon = ({ couponToEdit }: { couponToEdit: Coupon | null }) => {
       return false;
     }
 
-    // Ensure the end date is not before the start date
+    // Validate endDate only if it exists
     if (endDate && endDate < startDate) {
       notify.error("End date cannot be before the start date");
+      return false;
+    }
+
+    if (maxUsage <= 0) {
+      notify.error("Max usage must be greater than 0");
       return false;
     }
 
@@ -70,7 +85,9 @@ const AddCoupon = ({ couponToEdit }: { couponToEdit: Coupon | null }) => {
 
   const changeCoupon = () => {
     const couponsAfterUpdate = savedCoupons.map((coupon) =>
-      coupon.id === couponToEdit?.id ? newCoupon : coupon
+      coupon.id === couponToEdit?.id
+        ? { ...newCoupon, creationDate: coupon.creationDate } // Preserve original creationDate
+        : coupon
     );
     setSavedCoupons(couponsAfterUpdate);
     localStorage.setItem("coupons", JSON.stringify(couponsAfterUpdate));
@@ -84,13 +101,15 @@ const AddCoupon = ({ couponToEdit }: { couponToEdit: Coupon | null }) => {
         savedCoupons.length > 0
           ? savedCoupons[savedCoupons.length - 1].id + 1
           : 1,
+      creationDate: new Date(), // Set creation date to now
+      currentUsage: 0, // Initialize current usage
     };
     setSavedCoupons([...savedCoupons, newCouponWithId]);
     localStorage.setItem(
       "coupons",
       JSON.stringify([...savedCoupons, newCouponWithId])
     );
-    setNewCoupon(blankCoupon); 
+    setNewCoupon({ ...blankCoupon }); 
     notify.success("Coupon added successfully!");
   };
 
@@ -115,6 +134,7 @@ const AddCoupon = ({ couponToEdit }: { couponToEdit: Coupon | null }) => {
         }}
         className="add-coupon-form"
       >
+        {/* Coupon Name */}
         <label className="input-label">Coupon Name</label>
         <input
           type="text"
@@ -124,6 +144,7 @@ const AddCoupon = ({ couponToEdit }: { couponToEdit: Coupon | null }) => {
           className="input-field"
         />
 
+        {/* Description */}
         <label className="input-label">Description</label>
         <textarea
           placeholder="Enter a description for the coupon"
@@ -134,6 +155,7 @@ const AddCoupon = ({ couponToEdit }: { couponToEdit: Coupon | null }) => {
           className="input-field"
         />
 
+        {/* Discount Type */}
         <label className="input-label">Discount Type</label>
         <select
           value={newCoupon.discountType}
@@ -141,7 +163,7 @@ const AddCoupon = ({ couponToEdit }: { couponToEdit: Coupon | null }) => {
             setNewCoupon({
               ...newCoupon,
               discountType: e.target.value as "Amount" | "Percentage",
-              discount: 0,
+              discount: 0, // Reset discount when type changes
             })
           }
           className="input-field"
@@ -150,6 +172,7 @@ const AddCoupon = ({ couponToEdit }: { couponToEdit: Coupon | null }) => {
           <option value="Amount">Amount</option>
         </select>
 
+        {/* Discount */}
         <label className="input-label">
           {newCoupon.discountType === "Percentage"
             ? "Discount (%)"
@@ -164,11 +187,15 @@ const AddCoupon = ({ couponToEdit }: { couponToEdit: Coupon | null }) => {
           }
           value={newCoupon.discount || 0}
           onChange={(e) =>
-            setNewCoupon({ ...newCoupon, discount: parseFloat(e.target.value) })
+            setNewCoupon({
+              ...newCoupon,
+              discount: parseFloat(e.target.value),
+            })
           }
           className="input-field"
         />
 
+        {/* Price */}
         <label className="input-label">Price</label>
         <input
           type="number"
@@ -180,6 +207,7 @@ const AddCoupon = ({ couponToEdit }: { couponToEdit: Coupon | null }) => {
           className="input-field"
         />
 
+        {/* Amount */}
         <label className="input-label">Amount</label>
         <input
           type="number"
@@ -191,16 +219,74 @@ const AddCoupon = ({ couponToEdit }: { couponToEdit: Coupon | null }) => {
           className="input-field"
         />
 
-        <label className="input-label">Start Date</label>
+        {/* Is Combinable */}
+        <label className="input-label">Is Combinable</label>
         <input
-          type="date"
-          value={newCoupon.startDate.toISOString().split("T")[0]} // Use ISO string for consistency
+          type="checkbox"
+          checked={newCoupon.isCombinable}
           onChange={(e) =>
-            setNewCoupon({ ...newCoupon, startDate: new Date(e.target.value) })
+            setNewCoupon({
+              ...newCoupon,
+              isCombinable: e.target.checked,
+            })
           }
           className="input-field"
         />
 
+        {/* Code */}
+        <label className="input-label">Code</label>
+        <input
+          type="text"
+          placeholder="Enter the coupon code"
+          value={newCoupon.code}
+          onChange={(e) => setNewCoupon({ ...newCoupon, code: e.target.value })}
+          className="input-field"
+        />
+
+        {/* Max Usage */}
+        <label className="input-label">Max Usage</label>
+        <input
+          type="number"
+          placeholder="Enter the maximum usage"
+          value={newCoupon.maxUsage}
+          onChange={(e) =>
+            setNewCoupon({
+              ...newCoupon,
+              maxUsage: parseInt(e.target.value),
+            })
+          }
+          className="input-field"
+        />
+
+        {/* Is Available */}
+        <label className="input-label">Is Available</label>
+        <input
+          type="checkbox"
+          checked={newCoupon.isAvailable}
+          onChange={(e) =>
+            setNewCoupon({
+              ...newCoupon,
+              isAvailable: e.target.checked,
+            })
+          }
+          className="input-field"
+        />
+
+        {/* Start Date */}
+        <label className="input-label">Start Date</label>
+        <input
+          type="date"
+          value={newCoupon.startDate.toISOString().split("T")[0]}
+          onChange={(e) =>
+            setNewCoupon({
+              ...newCoupon,
+              startDate: new Date(e.target.value),
+            })
+          }
+          className="input-field"
+        />
+
+        {/* End Date */}
         <label className="input-label">End Date</label>
         <input
           type="date"
@@ -213,9 +299,10 @@ const AddCoupon = ({ couponToEdit }: { couponToEdit: Coupon | null }) => {
             })
           }
           className="input-field"
-          min={newCoupon.startDate.toISOString().split("T")[0]} // Prevent end date from being before start date!!
+          min={newCoupon.startDate.toISOString().split("T")[0]} // Ensure end date is after start date
         />
 
+        {/* Submit Button */}
         <button type="submit" className="action-button save">
           {couponToEdit ? "Update Coupon" : "Save Coupon"}
         </button>

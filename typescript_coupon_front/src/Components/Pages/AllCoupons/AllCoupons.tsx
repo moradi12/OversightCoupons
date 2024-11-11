@@ -5,7 +5,7 @@ import "./AllCoupons.css";
 
 const AllCoupons: React.FC = () => {
   const [coupons, setCoupons] = useState<Coupon[]>([]);
-  
+
   const userEmail = localStorage.getItem("userEmail");
   const isAdmin = userEmail === "admin@admin.com";
 
@@ -21,6 +21,17 @@ const AllCoupons: React.FC = () => {
           (coupon: Coupon, index: number) => ({
             ...coupon,
             id: coupon.id || index,
+            createdByUserId: coupon.createdByUserId || 0,
+            isCombinable:
+              coupon.isCombinable !== undefined ? coupon.isCombinable : true,
+            creationDate: coupon.creationDate
+              ? new Date(coupon.creationDate)
+              : new Date(),
+            code: coupon.code || "",
+            maxUsage: coupon.maxUsage || 1,
+            currentUsage: coupon.currentUsage || 0,
+            isAvailable:
+              coupon.isAvailable !== undefined ? coupon.isAvailable : true,
           })
         );
         setCoupons(parsedCoupons);
@@ -44,7 +55,7 @@ const AllCoupons: React.FC = () => {
               coupon={coupon}
               savedCoupons={coupons}
               setSavedCoupons={setCoupons}
-              isAdmin={isAdmin} /// only admin can see
+              isAdmin={isAdmin} // Only admin can see certain fields
             />
           ))}
         </ul>

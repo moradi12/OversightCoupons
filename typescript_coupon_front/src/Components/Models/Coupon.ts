@@ -1,3 +1,4 @@
+// Coupon.ts
 import { CouponUtils } from "../Utils/CouponUtils";
 
 export class Coupon {
@@ -6,7 +7,7 @@ export class Coupon {
   name: string;
   description?: string;
   createdByUserId: number;
-  creationDate: Date;
+  creationDate: Date; // Ensure creationDate is included
   discountType?: "Amount" | "Percentage";
   discount?: number;
   expirationDate?: Date;
@@ -40,6 +41,7 @@ export class Coupon {
     code,
     maxUsage,
     currentUsage = 0,
+    category,
   }: {
     title: string;
     id: number;
@@ -58,6 +60,7 @@ export class Coupon {
     code?: string;
     maxUsage: number;
     currentUsage?: number;
+    category?: any;
   }) {
     this.title = title;
     this.id = id;
@@ -77,5 +80,6 @@ export class Coupon {
     this.currentUsage = currentUsage;
     this.code = code || CouponUtils.generateCode();
     this.isAvailable = CouponUtils.calculateAvailability(this);
+    this.category = category;
   }
 }
