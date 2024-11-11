@@ -1,10 +1,13 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Coupon } from "../../Models/Coupon";
 import SingleCoupon from "../Coupon/SingleCoupon";
 import "./AllCoupons.css";
 
 const AllCoupons: React.FC = () => {
   const [coupons, setCoupons] = useState<Coupon[]>([]);
+  
+  const userEmail = localStorage.getItem("userEmail");
+  const isAdmin = userEmail === "admin@admin.com";
 
   useEffect(() => {
     loadCoupons();
@@ -17,7 +20,7 @@ const AllCoupons: React.FC = () => {
         const parsedCoupons: Coupon[] = JSON.parse(storedCoupons).map(
           (coupon: Coupon, index: number) => ({
             ...coupon,
-            id: coupon.id || index, 
+            id: coupon.id || index,
           })
         );
         setCoupons(parsedCoupons);
@@ -41,6 +44,7 @@ const AllCoupons: React.FC = () => {
               coupon={coupon}
               savedCoupons={coupons}
               setSavedCoupons={setCoupons}
+              isAdmin={isAdmin} /// only admin can see
             />
           ))}
         </ul>

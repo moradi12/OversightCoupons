@@ -14,7 +14,7 @@ const blankCoupon: Coupon = {
   startDate: new Date(),
   endDate: undefined,
   price: 0,
-  createdByUserId: 1,
+  createdByUserId: 0, // Initially set to 0 or some default
   amount: 0,
   isCombinable: true,
   creationDate: new Date(),
@@ -25,11 +25,20 @@ const blankCoupon: Coupon = {
   isAvailable: true,
 };
 
-const AddCoupon = ({ couponToEdit }: { couponToEdit: Coupon | null }) => {
-  const [newCoupon, setNewCoupon] = useState<Coupon>(
-    couponToEdit || blankCoupon
-  );
+const generateCouponCode = (): string => {
+  return "COUPON-" + Math.random().toString(36).substr(2, 9).toUpperCase();
+};
+
+const AddCoupon = ({
+  couponToEdit,
+  creatorUserId,
+}: {
+  couponToEdit: Coupon | null;
+  creatorUserId: number; // Pass the creator's user ID
+}) => {
+  const [newCoupon, setNewCoupon] = useState<Coupon>(couponToEdit || blankCoupon);
   const [savedCoupons, setSavedCoupons] = useState<Coupon[]>([]);
+  const [couponCode, setCouponCode] = useState<string | null>(null); // To display the coupon code after creation
 
   useEffect(() => {
     const storedCoupons = localStorage.getItem("coupons");
@@ -72,19 +81,16 @@ const AddCoupon = ({ couponToEdit }: { couponToEdit: Coupon | null }) => {
   };
 
   const addCoupon = () => {
-    const newCouponWithId ={
+    const newCouponWithId = {
       ...newCoupon,
-      id:
-        savedCoupons.length > 0
-          ? savedCoupons[savedCoupons.length - 1].id + 1
-          : 1,
-    }
+      id: savedCoupons.length > 0 ? savedCoupons[savedCoupons.length - 1].id + 1 : 1,
+      code: generateCouponCode(), // Generate a unique coupon code
+      createdByUserId: creatorUserId, // Assign the creator's user ID
+    };
     setSavedCoupons([...savedCoupons, newCouponWithId]);
-    localStorage.setItem(
-      "coupons",
-      JSON.stringify([...savedCoupons, newCouponWithId])
-    );
+    localStorage.setItem("coupons", JSON.stringify([...savedCoupons, newCouponWithId]));
     setNewCoupon(blankCoupon); // Reset to blank coupon
+    setCouponCode(newCouponWithId.code); // Display the generated coupon code
     notify.success("Coupon added successfully!");
   };
 
@@ -208,6 +214,13 @@ const AddCoupon = ({ couponToEdit }: { couponToEdit: Coupon | null }) => {
           {couponToEdit ? "Update Coupon" : "Save Coupon"}
         </button>
       </form>
+
+      {/* Display the coupon code after a coupon is added */}
+      {couponCode && (
+        <div className="coupon-code">
+          <h3>Coupon Code: {couponCode}</h3>
+        </div>
+      )}
     </div>
   );
 };
