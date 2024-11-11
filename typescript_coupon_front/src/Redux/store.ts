@@ -1,10 +1,9 @@
+// store.ts
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
-import { adminReducer } from './AdminReducer';
-import couponReducer from './CouponSlice';
+import couponReducer from '../Redux/CouponSlice'; // Adjust the path accordingly
 
 const rootReducer = combineReducers({
-  admin: adminReducer,
-  coupons: couponReducer, // Using the slice reducer
+  coupons: couponReducer, // Using the slice reducer for coupons
 });
 
 const store = configureStore({
@@ -17,5 +16,4 @@ const store = configureStore({
 
 export type RootState = ReturnType<typeof rootReducer>;
 export type AppDispatch = typeof store.dispatch;
-
 export default store;

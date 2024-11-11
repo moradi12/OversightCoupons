@@ -1,5 +1,6 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Coupon } from "../Components/Models/Coupon";
+// CouponSlice.ts
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { Coupon } from '../Components/Models/Coupon';
 
 interface CouponState {
   coupons: Coupon[];
@@ -14,7 +15,7 @@ const initialState: CouponState = {
 };
 
 const couponSlice = createSlice({
-  name: "coupons",
+  name: 'coupons',
   initialState,
   reducers: {
     fetchCouponsStart: (state) => {
