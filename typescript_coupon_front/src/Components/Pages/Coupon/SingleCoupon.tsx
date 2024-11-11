@@ -82,19 +82,15 @@ const SingleCoupon = ({
         Buy Coupon
       </button>
 
-      {/* Display coupon code logic */}
       {isAdmin ? (
-        // Show the code to admin
         <div className="mt-4">
           <strong>Coupon Code:</strong> {coupon.code}
         </div>
       ) : purchased ? (
-        // Show the code to the user after purchase
         <div className="mt-4 text-green-700">
           <strong>Coupon Code:</strong> {coupon.code}
         </div>
       ) : (
-        // Message to non-admin users who haven't purchased yet
         <div className="mt-4 text-red-700">
           You need to buy this coupon to get the code.
         </div>

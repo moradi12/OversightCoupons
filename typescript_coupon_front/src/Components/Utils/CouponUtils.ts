@@ -1,18 +1,34 @@
 import { Coupon } from "../Models/Coupon";
 
 export class CouponUtils {
+
+/// Master Coupon Discount
+//MASTERPERCENT15
+//MASTERFIXED20
+
   /**
    * Calculate the discounted price based on the discount type and value
    */
-  static calculateDiscountedPrice(coupon: Coupon): number {
-    const { discountType, discount, price } = coupon;
+  static calculateDiscountedPrice(coupon: Coupon, orderTotal: number): number {
+    const { discountType, discount } = coupon;
+
     if (discountType === "Percentage" && discount) {
-      return price * (1 - discount / 100);
+      // Set the final price to the fixed value
+      return discount;
     }
+    
+    if (discountType === "Percentage" && discount) {
+      // Apply percentage discount
+      return orderTotal * (1 - discount / 100);
+    }
+
     if (discountType === "Amount" && discount) {
-      return price - discount;
+      // Apply fixed discount amount
+      return Math.max(orderTotal - discount, 0); // Ensure the final price is not negative
     }
-    return price;
+
+    // If no discount is applied, return the original order total
+    return orderTotal;
   }
 
   /**
@@ -31,6 +47,11 @@ export class CouponUtils {
    * Increment the usage count of the coupon if it can still be used
    */
   static incrementUsage(coupon: Coupon): void {
+    if (coupon.isMasterCoupon) {
+      // Master coupons have unlimited usage, do nothing here
+      return;
+    }
+
     if (!coupon.isAvailable) {
       throw new Error("Coupon is not available.");
     }

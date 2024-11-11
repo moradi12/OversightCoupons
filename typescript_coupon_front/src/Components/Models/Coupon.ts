@@ -1,4 +1,3 @@
-// Coupon.ts
 import { CouponUtils } from "../Utils/CouponUtils";
 
 export class Coupon {
@@ -7,7 +6,7 @@ export class Coupon {
   name: string;
   description?: string;
   createdByUserId: number;
-  creationDate: Date; // Ensure creationDate is included
+  creationDate: Date;
   discountType?: "Amount" | "Percentage";
   discount?: number;
   expirationDate?: Date;
@@ -19,9 +18,10 @@ export class Coupon {
   price: number;
   startDate: Date;
   endDate?: Date;
-  image: any;
+  image?: any;
   isAvailable: boolean;
-  category: any;
+  category?: any; // Use specific type if available
+  isMasterCoupon: boolean;
 
   constructor({
     title,
@@ -42,11 +42,8 @@ export class Coupon {
     maxUsage,
     currentUsage = 0,
     category,
-    
-  }: 
-  
-  
-  {
+    isMasterCoupon = true, 
+  }: {
     title: string;
     id: number;
     name: string;
@@ -60,11 +57,12 @@ export class Coupon {
     amount: number;
     isCombinable: boolean;
     creationDate: Date;
-    image: any;
+    image?: any;
     code?: string;
     maxUsage: number;
     currentUsage?: number;
-    category?: any;
+    category?: any; // Use specific type if available
+    isMasterCoupon?: boolean;
   }) {
     this.title = title;
     this.id = id;
@@ -85,5 +83,6 @@ export class Coupon {
     this.code = code || CouponUtils.generateCode();
     this.isAvailable = CouponUtils.calculateAvailability(this);
     this.category = category;
+    this.isMasterCoupon = isMasterCoupon;
   }
 }

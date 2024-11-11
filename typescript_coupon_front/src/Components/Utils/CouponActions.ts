@@ -19,7 +19,7 @@ export const handleCouponPurchase = async (
 
       saveCouponsToLocalStorage(updatedCoupons);
       setSavedCoupons(updatedCoupons);
-      notify.success("Coupon purchased successfully!");
+      // notify.success("Coupon purchased successfully!");
     } else {
       notify.error("Coupon is out of stock or not available!");
     }

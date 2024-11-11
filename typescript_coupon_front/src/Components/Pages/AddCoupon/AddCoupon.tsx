@@ -23,6 +23,7 @@ const blankCoupon: Coupon = {
   maxUsage: 1, 
   currentUsage: 0,
   isAvailable: true, 
+  isMasterCoupon : true,
 };
 
 const AddCoupon = ({ couponToEdit }: { couponToEdit: Coupon | null }) => {
