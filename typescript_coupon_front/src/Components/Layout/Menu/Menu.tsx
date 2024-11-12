@@ -1,7 +1,10 @@
 import { Box, Button, Typography } from "@mui/material";
+import { useContext } from "react";
 import { NavLink } from "react-router-dom";
+import { AdminContext } from "../Context/AdminContext";
 
 export function Menu(): JSX.Element {
+  const { finishProvider } = useContext(AdminContext);
   /**
    * MUI design
    */
@@ -42,19 +45,26 @@ export function Menu(): JSX.Element {
       <Button component={NavLink} to="/all" sx={buttonStyle}>
         Coupon List
       </Button>
-      <Button component={NavLink} to="/all/customers" sx={buttonStyle}>
-        Customer List
-      </Button>
-      <Button component={NavLink} to="/admin/add/" sx={buttonStyle}>
-        Add Customer{" "}
-      </Button>
-      <Button component={NavLink} to="/admin/reports/" sx={buttonStyle}>
-        Reports
-      </Button>
-      <Button component={NavLink} to="/admin/coupon/add" sx={buttonStyle}>
-        Add Coupon
-      </Button>
-     
+      {finishProvider && (
+        <Button component={NavLink} to="/all/customers" sx={buttonStyle}>
+          Customer List
+        </Button>
+      )}
+      {finishProvider && (
+        <Button component={NavLink} to="/admin/add/" sx={buttonStyle}>
+          Add Customer{" "}
+        </Button>
+      )}
+      {finishProvider && (
+        <Button component={NavLink} to="/admin/reports/" sx={buttonStyle}>
+          Reports
+        </Button>
+      )}
+      {finishProvider && (
+        <Button component={NavLink} to="/admin/coupon/add" sx={buttonStyle}>
+          Add Coupon
+        </Button>
+      )}
       <Button component={NavLink} to="/master" sx={buttonStyle}>
         Generated Master
       </Button>
