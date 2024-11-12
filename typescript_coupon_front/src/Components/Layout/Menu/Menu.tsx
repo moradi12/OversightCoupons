@@ -5,10 +5,10 @@ import { AdminContext } from "../Context/AdminContext";
 
 export function Menu(): JSX.Element {
   const { finishProvider } = useContext(AdminContext);
+
   /**
    * MUI design
    */
-
   const buttonStyle = {
     color: "white",
     backgroundColor: "#1976d2",
@@ -17,8 +17,6 @@ export function Menu(): JSX.Element {
     padding: "5px 15px",
     "&:hover": { backgroundColor: "#115293", textDecoration: "none" },
   };
-
-  ///Typography ///
 
   return (
     <Box
@@ -29,7 +27,6 @@ export function Menu(): JSX.Element {
         boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
       }}
     >
-      {" "}
       <Typography
         variant="h4"
         color="black"
@@ -41,33 +38,30 @@ export function Menu(): JSX.Element {
         }}
       >
         Coupon System Menu
-      </Typography>{" "}
+      </Typography>
       <Button component={NavLink} to="/all" sx={buttonStyle}>
         Coupon List
       </Button>
       {finishProvider && (
-        <Button component={NavLink} to="/all/customers" sx={buttonStyle}>
-          Customer List
-        </Button>
+        <>
+          <Button component={NavLink} to="/all/customers" sx={buttonStyle}>
+            Customer List
+          </Button>
+          <Button component={NavLink} to="/admin/add/" sx={buttonStyle}>
+            Add Customer
+          </Button>
+          <Button component={NavLink} to="/admin/reports/" sx={buttonStyle}>
+            Reports
+          </Button>
+          <Button component={NavLink} to="/admin/coupon/add" sx={buttonStyle}>
+            Add Coupon
+          </Button>
+
+          <Button component={NavLink} to="/master" sx={buttonStyle}>
+            Generated Master
+          </Button>
+        </>
       )}
-      {finishProvider && (
-        <Button component={NavLink} to="/admin/add/" sx={buttonStyle}>
-          Add Customer{" "}
-        </Button>
-      )}
-      {finishProvider && (
-        <Button component={NavLink} to="/admin/reports/" sx={buttonStyle}>
-          Reports
-        </Button>
-      )}
-      {finishProvider && (
-        <Button component={NavLink} to="/admin/coupon/add" sx={buttonStyle}>
-          Add Coupon
-        </Button>
-      )}
-      <Button component={NavLink} to="/master" sx={buttonStyle}>
-        Generated Master
-      </Button>
     </Box>
   );
 }
