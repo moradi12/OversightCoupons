@@ -27,7 +27,9 @@ const CouponListItem: React.FC<{
       {isSelected && (
         <div className="apply-coupon-section">
           <h3>Enter Coupon Code</h3>
-          <ApplyCoupon coupon={coupon} orderTotal={orderTotal} onApplyCoupon={() => {}} />
+          <ApplyCoupon coupon={coupon} orderTotal={orderTotal} onApplyCoupon={() => { } } appliedCouponCodes={[]} setAppliedCouponCodes={function (codes: string[]): void {
+            throw new Error("Function not implemented.");
+          } } />
         </div>
       )}
     </li>

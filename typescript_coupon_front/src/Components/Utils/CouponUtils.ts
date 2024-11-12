@@ -1,34 +1,51 @@
 import { Coupon } from "../Models/Coupon";
 
+const MASTER_CODES = [
+  { code: "MASTER50", discountType: "Amount", discountValue: 50 },
+  { code: "MASTER30", discountType: "Amount", discountValue: 30 },
+];
+
 export class CouponUtils {
-
-/// Master Coupon Discount
-//MASTERPERCENT15
-//MASTERFIXED20
-
   /**
    * Calculate the discounted price based on the discount type and value
    */
-  static calculateDiscountedPrice(coupon: Coupon, orderTotal: number): number {
-    const { discountType, discount } = coupon;
+  static calculateDiscountedPrice(coupon: Coupon, orderTotal: number): { discountedPrice: number; discountAmount: number } {
+    let discountAmount = 0;
 
-    if (discountType === "Percentage" && discount) {
-      // Set the final price to the fixed value
-      return discount;
-    }
-    
-    if (discountType === "Percentage" && discount) {
-      // Apply percentage discount
-      return orderTotal * (1 - discount / 100);
+    if (coupon.discountType === "Percentage" && coupon.discount) {
+      discountAmount = (coupon.discount / 100) * orderTotal;
+    } else if (coupon.discountType === "Amount" && coupon.discount) {
+      discountAmount = coupon.discount;
     }
 
-    if (discountType === "Amount" && discount) {
-      // Apply fixed discount amount
-      return Math.max(orderTotal - discount, 0); // Ensure the final price is not negative
+    const discountedPrice = Math.max(orderTotal - discountAmount, 0); // Ensure the final price is not negative
+    return { discountedPrice, discountAmount };
+  }
+
+  /**
+   * Apply a coupon or master code to the order total
+   */
+  static applyCoupon(
+    inputCode: string,
+    coupon: Coupon,
+    orderTotal: number
+  ): { discountedPrice: number; discountAmount: number } {
+    // Check master codes
+    const masterCode = MASTER_CODES.find((mc) => mc.code === inputCode);
+    if (masterCode) {
+      const discountAmount = masterCode.discountType === "Percentage"
+        ? (masterCode.discountValue / 100) * orderTotal
+        : masterCode.discountValue;
+      const discountedPrice = Math.max(orderTotal - discountAmount, 0);
+      return { discountedPrice, discountAmount };
     }
 
-    // If no discount is applied, return the original order total
-    return orderTotal;
+    // Check regular coupon
+    if (inputCode === coupon.code && coupon.isAvailable) {
+      return this.calculateDiscountedPrice(coupon, orderTotal);
+    }
+
+    throw new Error("Invalid or unavailable coupon.");
   }
 
   /**
@@ -39,7 +56,7 @@ export class CouponUtils {
     return (
       amount > 0 &&
       currentUsage < maxUsage &&
-      (!endDate || new Date() <= endDate)
+      (!endDate || new Date() <= new Date(endDate))
     );
   }
 
@@ -59,7 +76,7 @@ export class CouponUtils {
       throw new Error("Coupon has reached its maximum usage limit.");
     }
     coupon.currentUsage++;
-    coupon.isAvailable = CouponUtils.calculateAvailability(coupon);
+    coupon.isAvailable = this.calculateAvailability(coupon);
   }
 
   /**

@@ -57,8 +57,9 @@ const OrderPage: React.FC<OrderPageProps> = ({ coupons, initialOrderTotal }) => 
               key={coupon.id}
               coupon={coupon}
               orderTotal={finalPrice || orderTotal}
-              onApplyCoupon={(discountedPrice) => handleApplyCoupon(discountedPrice, coupon)}
-            />
+              onApplyCoupon={(discountedPrice) => handleApplyCoupon(discountedPrice, coupon)} appliedCouponCodes={[]} setAppliedCouponCodes={function (codes: string[]): void {
+                throw new Error("Function not implemented.");
+              } }            />
           ))}
         </div>
       )}

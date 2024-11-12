@@ -4,6 +4,7 @@ import { handleCouponPurchase } from "../../Utils/CouponActions";
 import { getCouponsFromLocalStorage } from "../../Utils/LocalStorageUtils";
 import { notify } from "../../Utils/notif";
 import AddCoupon from "../AddCoupon/AddCoupon";
+// import ApplyCoupon from "../ApplyCoupon/ApplyCoupon";
 import { DeleteCoupon } from "../DeleteCoupon/DeleteCoupon";
 import CouponDetails from "./CouponDetails";
 
@@ -20,6 +21,7 @@ const SingleCoupon = ({
 }) => {
   const [isEdit, setIsEdit] = useState(false);
   const [purchased, setPurchased] = useState<boolean>(false);
+  const [redeem, setRedeem] = useState<boolean>(false);
 
   // Load coupons from local storage on mount
   useEffect(() => {
@@ -87,8 +89,18 @@ const SingleCoupon = ({
           <strong>Coupon Code:</strong> {coupon.code}
         </div>
       ) : purchased ? (
-        <div className="mt-4 text-green-700">
-          <strong>Coupon Code:</strong> {coupon.code}
+        <div>
+          <div className="mt-4 text-green-700">
+            <strong>Coupon Code:</strong> {coupon.code}
+          </div>
+          <div>
+            <button onClick={() => setRedeem(true)}>Redeem Coupon</button>
+          </div>
+          {redeem && (
+            <div className="mt-4">
+             
+            </div>
+          )}
         </div>
       ) : (
         <div className="mt-4 text-red-700">
