@@ -7,7 +7,7 @@ export const changeCoupon = (
   newCoupon: Coupon,
   setSavedCoupons: Function
 ) => {
-  const couponsAfterUpdate = savedCoupons.map((coupon) =>
+  const couponsAfterUpdate = savedCoupons.map((coupon) =>  // update the specific coupon while preserving the structure of the entire array
     coupon.id === couponToEdit?.id
       ? { ...newCoupon, code: coupon.code, creationDate: coupon.creationDate } // Preserve code and creationDate!!
       : coupon

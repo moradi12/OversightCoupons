@@ -80,7 +80,7 @@ const AddCoupon = ({ couponToEdit }: { couponToEdit: Coupon | null }) => {
             setNewCoupon({
               ...newCoupon,
               discountType: e.target.value as "Amount" | "Percentage",
-              discount: 0, // Reset discount when type changes
+              discount: 0, // Reset discount when type changes!!
             })
           }
           className="input-field"
@@ -120,7 +120,7 @@ const AddCoupon = ({ couponToEdit }: { couponToEdit: Coupon | null }) => {
             const value = e.target.value;
             setNewCoupon({
               ...newCoupon,
-              price: value ? parseFloat(value) : 0,
+              price: value ? parseFloat(value) : 0,///Default to 0 if no price is set
             });
           }}
           className="input-field"
@@ -179,7 +179,7 @@ const AddCoupon = ({ couponToEdit }: { couponToEdit: Coupon | null }) => {
         <label className="input-label">Start Date</label>
         <input
           type="date"
-          value={newCoupon.startDate.toISOString().split("T")[0]}
+          value={newCoupon.startDate.toISOString().split("T")[0]} //// remmber YYYY-MM-DD
           onChange={(e) =>
             setNewCoupon({
               ...newCoupon,

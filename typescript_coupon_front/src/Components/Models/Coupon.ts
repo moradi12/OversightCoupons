@@ -22,6 +22,16 @@ export class Coupon {
   isAvailable: boolean;
   category?: any;
   isMasterCoupon: boolean;
+  redeemedBy?: number[]; 
+
+  /**
+   * The constructor initializes a `Coupon` instance with its properties
+   * - Ensures all fields are properly set with defaults where needed
+   * - Generates unique codes and calculates availability automatically
+   * - Centralizes initialization for consistency and scalability
+   * - Simplifies object creation and reduces errors
+   */
+
 
   constructor({
     title,
@@ -63,6 +73,8 @@ export class Coupon {
     currentUsage?: number;
     category?: any; 
     isMasterCoupon?: boolean;
+    redeemedCount?: number; 
+    redeemedBy?: number[]; 
   }) {
     this.title = title;
     this.id = id;

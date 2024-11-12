@@ -1,0 +1,77 @@
+/* ReportsPage.css */
+
+/* General Container Styling */
+.reports-container {
+    margin: 0 auto;
+    padding: 20px;
+    max-width: 900px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #fefefe;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Main Heading */
+  .reports-container h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #333;
+    font-size: 2em;
+    border-bottom: 2px solid #007bff;
+    padding-bottom: 10px;
+  }
+  
+  /* Section Headings */
+  .reports-container h4 {
+    margin-top: 25px;
+    margin-bottom: 10px;
+    color: #555;
+    font-size: 1.2em;
+  }
+  
+  /* Buttons */
+  .reports-container button {
+    margin: 10px 5px 10px 0;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: #fff;
+    font-size: 0.95em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .reports-container button:hover {
+    background-color: #0056b3;
+  }
+  
+  /* Date Inputs */
+  .reports-container input[type="date"] {
+    margin: 5px 10px 15px 0;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1em;
+    width: 45%;
+    box-sizing: border-box;
+  }
+  
+  .reports-container input[type="date"]:focus {
+    border-color: #007bff;
+    outline: none;
+  }
+  
+  /* Report Display */
+  .reports-container pre {
+    background-color: #f8f9fa;
+    border: 1px solid #ddd;
+    padding: 15px;
+    border-radius: 5px;
+    overflow-x: auto;
+    font-size: 1em;
+    margin-top: 20px;
+    white-space: pre-wrap; 
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.05);
+  }
+  

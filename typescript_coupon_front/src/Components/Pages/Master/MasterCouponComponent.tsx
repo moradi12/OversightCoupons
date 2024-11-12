@@ -3,7 +3,7 @@ import "./MasterCouponComponent.css";
 import MasterCouponManager, { MasterCoupon } from "./MasterCouponManager";
 
 const MasterCouponComponent: React.FC = () => {
-  const [orderTotal, setOrderTotal] = useState<number>(300); // Example total
+  const [orderTotal, setOrderTotal] = useState<number>(300); 
   const [inputCode, setInputCode] = useState<string>("");
   const [generatedCoupon, setGeneratedCoupon] = useState<MasterCoupon | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -23,7 +23,7 @@ const MasterCouponComponent: React.FC = () => {
   };
 
   const handleGenerateCoupon = () => {
-    const newCoupon = MasterCouponManager.generateCoupon("Percentage", 20); // Example: 20% off
+    const newCoupon = MasterCouponManager.generateCoupon("Percentage", 20); 
     setGeneratedCoupon(newCoupon);
     alert(`Generated new coupon: ${newCoupon.code}`);
   };

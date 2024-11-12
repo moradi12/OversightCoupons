@@ -8,6 +8,8 @@ export const generateUniqueCode = (savedCoupons:Coupon[]): string => {
     while (!isUnique) {
       const codeLength = Math.floor(Math.random() * 2) + 4; // Random length between 4 and 5
       let generatedCode = "";
+
+          // Generate a code of the determined length
       for (let i = 0; i < codeLength; i++) {
         generatedCode += characters.charAt(
           Math.floor(Math.random() * characters.length)

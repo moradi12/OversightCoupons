@@ -5,6 +5,8 @@ class LocalStorageService<T> {
     this.storageKey = storageKey;
   }
 
+
+  ///// Can be used for any data type (T) without rewriting similar code for each use case!!!!
   save(data: T[]): void {
     localStorage.setItem(this.storageKey, JSON.stringify(data));
   }
@@ -25,6 +27,8 @@ class LocalStorageService<T> {
     const filteredData = existingData.filter((item) => !predicate(item));
     this.save(filteredData);
   }
+
+  // Clear all data for the key
 
   clear(): void {
     localStorage.removeItem(this.storageKey);

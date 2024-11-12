@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import { Coupon } from "../../Models/Coupon";
 import ApplyCoupon from "./ApplyCoupon";
 
+// Updates the order total when a coupon is applied!!!
 const ApplyCouponWrapper: React.FC = () => {
-  const [orderTotal, setOrderTotal] = useState<number>(150); 
+  const [orderTotal, setOrderTotal] = useState<number>(150);
   const [appliedCouponCodes, setAppliedCouponCodes] = useState<string[]>([]);
 
   const sampleCoupon: Coupon = {
@@ -36,11 +37,11 @@ const ApplyCouponWrapper: React.FC = () => {
 
   return (
     <ApplyCoupon
-      coupon={sampleCoupon}
-      orderTotal={orderTotal}
-      onApplyCoupon={handleApplyCoupon}
-      appliedCouponCodes={appliedCouponCodes}
-      setAppliedCouponCodes={setAppliedCouponCodes}
+      coupon={sampleCoupon} //  Passes the sample coupon to the ApplyCoupon component
+      orderTotal={orderTotal} // Current order total
+      onApplyCoupon={handleApplyCoupon} //Update the total after applying a coupon
+      appliedCouponCodes={appliedCouponCodes} //List of already applied coupon codes
+      setAppliedCouponCodes={setAppliedCouponCodes} //Function to update applied coupon codes
     />
   );
 };

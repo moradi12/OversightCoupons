@@ -26,7 +26,9 @@ const CouponDetails: React.FC<CouponDetailsProps> = ({ coupon, isAdmin }) => {
       <div>
         Price: ${coupon.price !== undefined ? coupon.price : "Not Available"}
       </div>
-      <div>Available Amount: {coupon.amount !== undefined ? coupon.amount : "N/A"}</div>
+      <div>
+        Available Amount: {coupon.amount !== undefined ? coupon.amount : "N/A"}
+      </div>
 
       {coupon.category && <div>Category: {coupon.category}</div>}
 
