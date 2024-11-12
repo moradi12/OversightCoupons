@@ -22,11 +22,12 @@ export function MainRoute(): JSX.Element {
           <Route path="/master" element={<MasterCouponComponent />} />
           <Route path="/admin/coupon/add" element={<AddCoupon couponToEdit={null} />}/>
           <Route path="/admin/reports" element={<ReportsPage />} />
-          <Route path="/discount/"element={<DiscountCouponComponent />} />
         </Route>
 
         {/* Public Routes */}
         <Route path="/" element={<Main />} />
+        <Route path="/discount/"element={<DiscountCouponComponent />} />
+
         <Route path="/all" element={<AllCoupons />} />
         <Route path="/login" element={<Login />} />
         <Route path="*" element={<Page404 />} />

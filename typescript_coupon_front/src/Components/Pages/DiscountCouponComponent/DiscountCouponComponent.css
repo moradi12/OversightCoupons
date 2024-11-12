@@ -7,7 +7,6 @@
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     text-align: center;
   }
-  
   .coupon-input {
     width: 100%;
     padding: 10px;
@@ -15,7 +14,6 @@
     border: 1px solid #ccc;
     border-radius: 5px;
   }
-  
   .apply-coupon-button {
     padding: 10px 20px;
     background-color: #4caf50;
@@ -24,11 +22,9 @@
     border-radius: 5px;
     cursor: pointer;
   }
-  
   .apply-coupon-button:hover {
     background-color: #45a049;
   }
-  
   .error-message {
     color: red;
     font-size: 0.9em;

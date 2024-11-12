@@ -42,8 +42,14 @@ export function Menu(): JSX.Element {
       <Button component={NavLink} to="/all" sx={buttonStyle}>
         Coupon List
       </Button>
+
+      <Button component={NavLink} to="/discount" sx={buttonStyle}>
+        Discount
+      </Button>
       {finishProvider && (
         <>
+
+
           <Button component={NavLink} to="/all/customers" sx={buttonStyle}>
             Customer List
           </Button>

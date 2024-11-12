@@ -7,6 +7,7 @@ const MasterCouponComponent: React.FC = () => {
   const [inputCode, setInputCode] = useState<string>("");
   const [generatedCoupon, setGeneratedCoupon] = useState<MasterCoupon | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null); // For apply coupon success
 
   const handleApplyCoupon = () => {
     try {
@@ -16,16 +17,16 @@ const MasterCouponComponent: React.FC = () => {
       );
       setOrderTotal(discountedPrice);
       setError(null); // Clear errors
-      alert(`Coupon applied! You saved $${discountAmount.toFixed(2)}.`);
+      setSuccessMessage(`Coupon applied! You saved $${discountAmount.toFixed(2)}.`);
     } catch (e) {
       setError((e as Error).message);
+      setSuccessMessage(null); // Clear success message on error
     }
   };
 
   const handleGenerateCoupon = () => {
     const newCoupon = MasterCouponManager.generateCoupon("Percentage", 20); 
     setGeneratedCoupon(newCoupon);
-    alert(`Generated new coupon: ${newCoupon.code}`);
   };
 
   return (
@@ -44,6 +45,9 @@ const MasterCouponComponent: React.FC = () => {
       <button className="apply-button" onClick={handleApplyCoupon}>
         Apply Coupon
       </button>
+
+      {/* Success Message */}
+      {successMessage && <p className="success-message">{successMessage}</p>}
 
       {/* Error Message */}
       {error && <p className="error-message">{error}</p>}
