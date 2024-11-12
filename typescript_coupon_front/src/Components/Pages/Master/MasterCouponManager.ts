@@ -55,4 +55,5 @@ class MasterCouponManager {
   }
 }
 
-export default new MasterCouponManager();
+const masterCouponManagerInstance = new MasterCouponManager();
+export default masterCouponManagerInstance;
