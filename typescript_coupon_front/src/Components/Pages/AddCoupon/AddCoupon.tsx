@@ -51,15 +51,18 @@ const AddCoupon = ({ couponToEdit }: { couponToEdit: Coupon | null }) => {
 
     while (!isUnique) {
       const codeLength = Math.floor(Math.random() * 2) + 4; // Random length between 4 and 5
-      code = '';
+      let generatedCode = ''; 
       for (let i = 0; i < codeLength; i++) {
-        code += characters.charAt(Math.floor(Math.random() * characters.length));
+        generatedCode += characters.charAt(Math.floor(Math.random() * characters.length));
       }
-      // Check if the code is unique among saved coupons
-      isUnique = !savedCoupons.some((coupon) => coupon.code === code);
+      isUnique = !savedCoupons.some((coupon) => coupon.code === generatedCode);
+      if (isUnique) {
+        code = generatedCode; 
+      }
     }
-
-    return code; //  code is always a string
+    
+    return code; 
+    
   };
 
   const validateCoupon = (): boolean => {
