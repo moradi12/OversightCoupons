@@ -8,6 +8,7 @@ import AllCustomers from "../../AllCustomers/AllCustomers";
 import Login from "../../Login/Login";
 import MasterCouponComponent from "../../Master/MasterCouponComponent";
 import { Page404 } from "../../Page404/Page404";
+import { CouponReports } from "../../Reports/CouponReports";
 
 export function MainRoute(): JSX.Element {
   return (
@@ -18,15 +19,13 @@ export function MainRoute(): JSX.Element {
           <Route path="/admin/add" element={<AddCustomer />} />
           <Route path="/all/customers" element={<AllCustomers />} />
           <Route path="/master" element={<MasterCouponComponent />} />
-
+          <Route path="/admin/coupon/add" element={<AddCoupon couponToEdit={null} />}/>
+          <Route path="/admin/reports" element={<CouponReports />} />
+          
         </Route>
-      
 
         {/* Public Routes */}
-        <Route
-          path="/admin/coupon/add"
-          element={<AddCoupon couponToEdit={null} />}
-        />
+
         <Route path="/" element={<Main />} />
         <Route path="/all" element={<AllCoupons />} />
         <Route path="/login" element={<Login />} />
