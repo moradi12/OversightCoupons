@@ -1,38 +1,23 @@
 import { useEffect, useState } from "react";
 import { Coupon } from "../../Models/Coupon";
 import { notify } from "../../Utils/notif";
+import { addCoupon } from "../Coupon/addCoupon";
+import { blankCoupon } from "../Coupon/Blank";
+import { changeCoupon } from "../Coupon/changeCoupon";
+import { validateCoupon } from "../Coupon/Validate";
 import "./AddCoupon.css";
-
-const blankCoupon: Coupon = {
-  id: 0,
-  title: "",
-  category: "",
-  name: "",
-  description: "",
-  discountType: "Percentage",
-  discount: 0,
-  startDate: new Date(),
-  endDate: undefined,
-  price: 0,
-  createdByUserId: 1, 
-  amount: 0,
-  isCombinable: true,
-  creationDate: new Date(), 
-  image: null,
-  code: "", 
-  maxUsage: 1, 
-  currentUsage: 0,
-  isAvailable: true, 
-  isMasterCoupon : true,
-};
 
 const AddCoupon = ({ couponToEdit }: { couponToEdit: Coupon | null }) => {
   const [newCoupon, setNewCoupon] = useState<Coupon>(
     couponToEdit
       ? {
           ...couponToEdit,
-          startDate: couponToEdit.startDate ? new Date(couponToEdit.startDate) : new Date(),
-          endDate: couponToEdit.endDate ? new Date(couponToEdit.endDate) : undefined,
+          startDate: couponToEdit.startDate
+            ? new Date(couponToEdit.startDate)
+            : new Date(),
+          endDate: couponToEdit.endDate
+            ? new Date(couponToEdit.endDate)
+            : undefined,
         }
       : { ...blankCoupon }
   );
@@ -44,112 +29,13 @@ const AddCoupon = ({ couponToEdit }: { couponToEdit: Coupon | null }) => {
     if (storedCoupons) setSavedCoupons(JSON.parse(storedCoupons));
   }, []);
 
-  const generateUniqueCode = (): string => {
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-    let code: string = ''; // Explicitly type and initialize code
-    let isUnique = false;
-
-    while (!isUnique) {
-      const codeLength = Math.floor(Math.random() * 2) + 4; // Random length between 4 and 5
-      let generatedCode = ''; 
-      for (let i = 0; i < codeLength; i++) {
-        generatedCode += characters.charAt(Math.floor(Math.random() * characters.length));
-      }
-      isUnique = !savedCoupons.some((coupon) => coupon.code === generatedCode);
-      if (isUnique) {
-        code = generatedCode; 
-      }
-    }
-    
-    return code; 
-    
-  };
-
-  const validateCoupon = (): boolean => {
-    const {
-      name,
-      description,
-      discount,
-      price,
-      discountType,
-      startDate,
-      endDate,
-      maxUsage,
-    } = newCoupon;
-
-    if (!name.trim() || !description?.trim()) {
-      notify.error("Name and Description are required");
-      return false;
-    }
-
-    if (
-      discountType === "Percentage" &&
-      (discount! <= 0 || discount! > 100)
-    ) {
-      notify.error("Discount percentage must be between 1 and 100");
-      return false;
-    }
-
-    if (discountType === "Amount" && discount! <= 0) {
-      notify.error("Discount amount must be greater than 0");
-      return false;
-    }
-
-    if (price <= 0) {
-      notify.error("Price must be greater than 0");
-      return false;
-    }
-
-    // Validate endDate only if it exists
-    if (endDate && endDate < startDate) {
-      notify.error("End date cannot be before the start date");
-      return false;
-    }
-
-    if (maxUsage <= 0) {
-      notify.error("Max usage must be greater than 0");
-      return false;
-    }
-
-    return true;
-  };
-
-  const changeCoupon = () => {
-    const couponsAfterUpdate = savedCoupons.map((coupon) =>
-      coupon.id === couponToEdit?.id
-        ? { ...newCoupon, code: coupon.code, creationDate: coupon.creationDate } // Preserve code and creationDate
-        : coupon
-    );
-    setSavedCoupons(couponsAfterUpdate);
-    localStorage.setItem("coupons", JSON.stringify(couponsAfterUpdate));
-    notify.success("Coupon updated successfully!");
-  };
-
-  const addCoupon = () => {
-    const newCouponWithId = {
-      ...newCoupon,
-      id:
-        savedCoupons.length > 0
-          ? savedCoupons[savedCoupons.length - 1].id + 1
-          : 1,
-      code: generateUniqueCode(), // Automatically generate a unique code
-      creationDate: new Date(), 
-      currentUsage: 0, // Initialize current usage!
-    };
-    setSavedCoupons([...savedCoupons, newCouponWithId]);
-    localStorage.setItem(
-      "coupons",
-      JSON.stringify([...savedCoupons, newCouponWithId])
-    );
-    setNewCoupon({ ...blankCoupon });
-    notify.success("Coupon added successfully!");
-  };
-
   const handleSaveCoupon = () => {
-    if (!validateCoupon()) return;
+    if (!validateCoupon(newCoupon)) return;
 
     try {
-      couponToEdit ? changeCoupon() : addCoupon();
+      couponToEdit
+        ? changeCoupon(couponToEdit, savedCoupons, newCoupon, setSavedCoupons)
+        : addCoupon(newCoupon, savedCoupons, setSavedCoupons, setNewCoupon);
     } catch (error) {
       console.error("Failed to save coupon:", error);
       notify.error("Failed to save coupon. Please try again");
@@ -175,7 +61,6 @@ const AddCoupon = ({ couponToEdit }: { couponToEdit: Coupon | null }) => {
           onChange={(e) => setNewCoupon({ ...newCoupon, name: e.target.value })}
           className="input-field"
         />
-
         {/* Description */}
         <label className="input-label">Description</label>
         <textarea
@@ -186,7 +71,6 @@ const AddCoupon = ({ couponToEdit }: { couponToEdit: Coupon | null }) => {
           }
           className="input-field"
         />
-
         {/* Discount Type */}
         <label className="input-label">Discount Type</label>
         <select
@@ -203,7 +87,6 @@ const AddCoupon = ({ couponToEdit }: { couponToEdit: Coupon | null }) => {
           <option value="Percentage">Percentage</option>
           <option value="Amount">Amount</option>
         </select>
-
         {/* Discount */}
         <label className="input-label">
           {newCoupon.discountType === "Percentage"
@@ -226,7 +109,6 @@ const AddCoupon = ({ couponToEdit }: { couponToEdit: Coupon | null }) => {
           }
           className="input-field"
         />
-
         {/* Price */}
         <label className="input-label">Price</label>
         <input
@@ -238,7 +120,6 @@ const AddCoupon = ({ couponToEdit }: { couponToEdit: Coupon | null }) => {
           }
           className="input-field"
         />
-
         {/* Amount */}
         <label className="input-label">Amount</label>
         <input
@@ -250,7 +131,6 @@ const AddCoupon = ({ couponToEdit }: { couponToEdit: Coupon | null }) => {
           }
           className="input-field"
         />
-
         {/* Is Combinable */}
         <label className="input-label">Is Combinable</label>
         <input
@@ -264,7 +144,6 @@ const AddCoupon = ({ couponToEdit }: { couponToEdit: Coupon | null }) => {
           }
           className="input-field"
         />
-
         {/* Max Usage */}
         <label className="input-label">Max Usage</label>
         <input
@@ -279,7 +158,6 @@ const AddCoupon = ({ couponToEdit }: { couponToEdit: Coupon | null }) => {
           }
           className="input-field"
         />
-
         Is Available
         <label className="input-label">Is Available</label>
         <input
@@ -293,7 +171,6 @@ const AddCoupon = ({ couponToEdit }: { couponToEdit: Coupon | null }) => {
           }
           className="input-field"
         />
-
         {/* Start Date */}
         <label className="input-label">Start Date</label>
         <input
@@ -307,7 +184,6 @@ const AddCoupon = ({ couponToEdit }: { couponToEdit: Coupon | null }) => {
           }
           className="input-field"
         />
-
         {/* End Date */}
         <label className="input-label">End Date</label>
         <input
@@ -323,7 +199,6 @@ const AddCoupon = ({ couponToEdit }: { couponToEdit: Coupon | null }) => {
           className="input-field"
           min={newCoupon.startDate.toISOString().split("T")[0]} // Ensure end date is after start date
         />
-
         {/* Submit Button */}
         <button type="submit" className="action-button save">
           {couponToEdit ? "Update Coupon" : "Save Coupon"}
