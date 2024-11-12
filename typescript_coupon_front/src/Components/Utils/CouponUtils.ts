@@ -9,7 +9,10 @@ export class CouponUtils {
   /**
    * Calculate the discounted price based on the discount type and value
    */
-  static calculateDiscountedPrice(coupon: Coupon, orderTotal: number): { discountedPrice: number; discountAmount: number } {
+  static calculateDiscountedPrice(
+    coupon: Coupon,
+    orderTotal: number
+  ): { discountedPrice: number; discountAmount: number } {
     let discountAmount = 0;
 
     if (coupon.discountType === "Percentage" && coupon.discount) {
@@ -33,9 +36,10 @@ export class CouponUtils {
     // Check master codes
     const masterCode = MASTER_CODES.find((mc) => mc.code === inputCode);
     if (masterCode) {
-      const discountAmount = masterCode.discountType === "Percentage"
-        ? (masterCode.discountValue / 100) * orderTotal
-        : masterCode.discountValue;
+      const discountAmount =
+        masterCode.discountType === "Percentage"
+          ? (masterCode.discountValue / 100) * orderTotal
+          : masterCode.discountValue;
       const discountedPrice = Math.max(orderTotal - discountAmount, 0);
       return { discountedPrice, discountAmount };
     }
@@ -64,7 +68,7 @@ export class CouponUtils {
    * Increment the usage count of the coupon if it can still be used
    */
   static incrementUsage(coupon: Coupon): void {
-    if (coupon.isMasterCoupon) {
+    if (MASTER_CODES.some((mc) => mc.code === coupon.code)) {
       // Master coupons have unlimited usage, do nothing here
       return;
     }
@@ -93,5 +97,12 @@ export class CouponUtils {
    */
   static canCombine(coupon: Coupon): boolean {
     return coupon.isCombinable;
+  }
+
+  /**
+   * Check if a given code is a master coupon
+   */
+  static isMasterCode(code: string): boolean {
+    return MASTER_CODES.some((mc) => mc.code === code);
   }
 }
