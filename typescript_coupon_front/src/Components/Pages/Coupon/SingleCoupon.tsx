@@ -22,8 +22,8 @@ const SingleCoupon = ({
   const [isEdit, setIsEdit] = useState(false);
   const [purchased, setPurchased] = useState<boolean>(false);
   const [redeem, setRedeem] = useState<boolean>(false);
-  const [orderTotal, setOrderTotal] = useState<number>(150); // Example order total
-  const [appliedCouponCodes, setAppliedCouponCodes] = useState<string[]>([]); // Track applied coupons
+  const [orderTotal, setOrderTotal] = useState<number>(coupon.price);
+  const [appliedCouponCodes, setAppliedCouponCodes] = useState<string[]>([]);
 
   useEffect(() => {
     const loadedCoupons = getCouponsFromLocalStorage();
@@ -36,7 +36,6 @@ const SingleCoupon = ({
         await handleCouponPurchase(coupon, savedCoupons, setSavedCoupons);
         notify.success("Coupon purchased successfully!");
 
-        // Mark the coupon as purchased so it can be displayed to the user
         setPurchased(true);
       } else {
         notify.error("Coupon is out of stock or not available!");
