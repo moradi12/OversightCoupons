@@ -4,7 +4,7 @@ import { handleCouponPurchase } from "../../Utils/CouponActions";
 import { getCouponsFromLocalStorage } from "../../Utils/LocalStorageUtils";
 import { notify } from "../../Utils/notif";
 import AddCoupon from "../AddCoupon/AddCoupon";
-// import ApplyCoupon from "../ApplyCoupon/ApplyCoupon";
+import ApplyCoupon from "../ApplyCoupon/ApplyCoupon"; // Import ApplyCoupon
 import { DeleteCoupon } from "../DeleteCoupon/DeleteCoupon";
 import CouponDetails from "./CouponDetails";
 
@@ -22,8 +22,9 @@ const SingleCoupon = ({
   const [isEdit, setIsEdit] = useState(false);
   const [purchased, setPurchased] = useState<boolean>(false);
   const [redeem, setRedeem] = useState<boolean>(false);
+  const [orderTotal, setOrderTotal] = useState<number>(150); // Example order total
+  const [appliedCouponCodes, setAppliedCouponCodes] = useState<string[]>([]); // Track applied coupons
 
-  // Load coupons from local storage on mount
   useEffect(() => {
     const loadedCoupons = getCouponsFromLocalStorage();
     setSavedCoupons(loadedCoupons);
@@ -88,23 +89,32 @@ const SingleCoupon = ({
         <div className="mt-4">
           <strong>Coupon Code:</strong> {coupon.code}
         </div>
-      ) : purchased ? (
+      ) : (
         <div>
-          <div className="mt-4 text-green-700">
-            <strong>Coupon Code:</strong> {coupon.code}
-          </div>
-          <div>
-            <button onClick={() => setRedeem(true)}>Redeem Coupon</button>
-          </div>
-          {redeem && (
-            <div className="mt-4">
-             
+          {purchased ? (
+            <div className="mt-4 text-green-700">
+              <strong>Coupon Code:</strong> {coupon.code}
+            </div>
+          ) : (
+            <div className="mt-4 text-red-700">
+              You need to buy this coupon to get the code.
             </div>
           )}
-        </div>
-      ) : (
-        <div className="mt-4 text-red-700">
-          You need to buy this coupon to get the code.
+          <div className="mt-2">
+            {/* Redeem Coupon Button */}
+            <button onClick={() => setRedeem(!redeem)}>
+              {redeem ? "Close Redeem" : "Redeem Coupon"}
+            </button>
+          </div>
+          {redeem && (
+            <ApplyCoupon
+              coupon={coupon} 
+              orderTotal={orderTotal}
+              onApplyCoupon={setOrderTotal} 
+              appliedCouponCodes={appliedCouponCodes} 
+              setAppliedCouponCodes={setAppliedCouponCodes} 
+            />
+          )}
         </div>
       )}
     </li>

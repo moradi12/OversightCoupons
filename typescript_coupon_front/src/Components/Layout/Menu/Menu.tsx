@@ -54,6 +54,9 @@ export function Menu(): JSX.Element {
       <Button component={NavLink} to="/admin/coupon/add" sx={buttonStyle}>
         Add Coupon
       </Button>
+      <Button component={NavLink} to="/coupon/apply" sx={buttonStyle}>
+        Apply Coupon
+      </Button>
     </Box>
   );
 }

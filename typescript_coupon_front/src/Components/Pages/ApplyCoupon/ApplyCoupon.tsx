@@ -5,9 +5,9 @@ import { notify } from "../../Utils/notif";
 
 interface ApplyCouponProps {
   coupon: Coupon;
-  orderTotal: number;
+  orderTotal: number; 
   onApplyCoupon: (newTotal: number) => void;
-  appliedCouponCodes: string[];
+  appliedCouponCodes: string[];  
   setAppliedCouponCodes: (codes: string[]) => void;
 }
 
@@ -18,9 +18,9 @@ const ApplyCoupon: React.FC<ApplyCouponProps> = ({
   appliedCouponCodes,
   setAppliedCouponCodes,
 }) => {
-  const [inputCode, setInputCode] = useState<string>(""); // User-entered coupon code
-  const [discountAmount, setDiscountAmount] = useState<number | null>(null); // Discount amount
-  const [finalPrice, setFinalPrice] = useState<number | null>(null); // Price after applying coupon
+  const [inputCode, setInputCode] = useState<string>("");
+  const [discountAmount, setDiscountAmount] = useState<number | null>(null);
+  const [finalPrice, setFinalPrice] = useState<number>(orderTotal);
 
   const handleApplyCoupon = () => {
     try {
@@ -30,19 +30,31 @@ const ApplyCoupon: React.FC<ApplyCouponProps> = ({
         return;
       }
 
-      // Apply the coupon using CouponUtils
-      const { discountedPrice, discountAmount } = CouponUtils.applyCoupon(inputCode, coupon, orderTotal);
+      // Validate coupon code
+      if (inputCode !== coupon.code) {
+        notify.error("Invalid coupon code. Please try again.");
+        return;
+      }
 
-      // Update the state
+      // Check coupon availability
+      if (!coupon.isAvailable) {
+        notify.error("This coupon is no longer available.");
+        return;
+      }
+
+      // Check coupon expiration
+      if (coupon.endDate && new Date() > new Date(coupon.endDate)) {
+        notify.error("This coupon has expired.");
+        return;
+      }
+
+      const { discountedPrice, discountAmount } = CouponUtils.applyCoupon(inputCode, coupon, orderTotal);
       setDiscountAmount(discountAmount);
       setFinalPrice(discountedPrice);
-
-      // Pass the updated total to the parent
       onApplyCoupon(discountedPrice);
-
-      // Track the applied coupon
       setAppliedCouponCodes([...appliedCouponCodes, inputCode]);
 
+      // Notify the user
       notify.success(`Coupon applied successfully! You saved $${discountAmount.toFixed(2)}.`);
     } catch (error) {
       if (error instanceof Error) {
@@ -78,7 +90,7 @@ const ApplyCoupon: React.FC<ApplyCouponProps> = ({
         {discountAmount !== null && (
           <>
             <p>Discount: <span className="text-green-500 font-bold">- ${discountAmount.toFixed(2)}</span></p>
-            <p>Final Price: <span className="text-blue-500 font-bold">${finalPrice?.toFixed(2)}</span></p>
+            <p>Final Price: <span className="text-blue-500 font-bold">${finalPrice.toFixed(2)}</span></p>
           </>
         )}
       </div>
