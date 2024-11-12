@@ -5,6 +5,8 @@ import { CouponUtils } from "../../Utils/CouponUtils";
 import { notify } from "../../Utils/notif";
 import MasterCouponManager from "../Master/MasterCouponManager";
 
+//TOfix 
+
 interface ApplyCouponProps {
   coupon: Coupon;
   orderTotal: number;
@@ -85,10 +87,6 @@ const ApplyCoupon: React.FC<ApplyCouponProps> = ({
       onApplyCoupon(discountedPrice, discountAmount);
       setAppliedCouponCodes([...appliedCouponCodes, inputCode]);
 
-      // Optionally, update coupon usage here
-      // e.g., decrement maxUsage and save to localStorage
-
-      // Notify the user
       notify.success(
         `Coupon applied successfully! You saved $${discountAmount.toFixed(
           2

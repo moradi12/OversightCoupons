@@ -120,3 +120,95 @@ export async function purchaseCoupon(couponId) {
     throw new Error(error.response?.data || `Failed to purchase coupon with ID ${couponId}`);
   }
 }
+/**
+ * Get a single coupon by ID
+ */
+export async function getCouponById(couponId) {
+  try {
+    const response = await api.get(`/coupons/${couponId}`);
+    return response.data;
+  } catch (error) {
+    console.error(`Error fetching coupon with ID ${couponId}: ${error.response?.data || error.message}`);
+    throw new Error(error.response?.data || `Failed to fetch coupon with ID ${couponId}`);
+  }
+}
+
+/**
+ * Apply a coupon to an order
+ */
+export async function applyCoupon(couponCode, orderTotal) {
+  try {
+    const response = await api.post("/coupons/apply", { couponCode, orderTotal });
+    return response.data;
+  } catch (error) {
+    console.error(`Error applying coupon code ${couponCode}: ${error.response?.data || error.message}`);
+    throw new Error(error.response?.data || `Failed to apply coupon code ${couponCode}`);
+  }
+}
+
+/**
+ * Bulk delete coupons
+ */
+export async function bulkDeleteCoupons(couponIds) {
+  try {
+    const response = await api.post("/coupons/bulk-delete", { couponIds });
+    return response.data.message || `Coupons successfully deleted.`;
+  } catch (error) {
+    console.error(`Error bulk deleting coupons: ${error.response?.data || error.message}`);
+    throw new Error(error.response?.data || `Failed to bulk delete coupons.`);
+  }
+}
+
+/**
+ * Get paginated coupons
+ */
+export async function getCouponsPaginated(page, limit, filters = {}) {
+  try {
+    const response = await api.get("/coupons", {
+      params: { page, limit, ...filters },
+    });
+    return response.data;
+  } catch (error) {
+    console.error(`Error fetching paginated coupons: ${error.response?.data || error.message}`);
+    throw new Error(error.response?.data || `Failed to fetch coupons.`);
+  }
+}
+
+/**
+ * Get coupon usage statistics
+ */
+export async function getCouponUsageStats() {
+  try {
+    const response = await api.get("/coupons/stats");
+    return response.data;
+  } catch (error) {
+    console.error(`Error fetching coupon usage statistics: ${error.response?.data || error.message}`);
+    throw new Error(error.response?.data || `Failed to fetch coupon usage statistics.`);
+  }
+}
+
+/**
+ * Generate a new master coupon
+ */
+export async function generateMasterCoupon(discountType, discountValue) {
+  try {
+    const response = await api.post("/master-coupons/generate", { discountType, discountValue });
+    return response.data;
+  } catch (error) {
+    console.error(`Error generating master coupon: ${error.response?.data || error.message}`);
+    throw new Error(error.response?.data || `Failed to generate master coupon.`);
+  }
+}
+
+/**
+ * Get all master coupons
+ */
+export async function getMasterCoupons() {
+  try {
+    const response = await api.get("/master-coupons");
+    return response.data;
+  } catch (error) {
+    console.error(`Error fetching master coupons: ${error.response?.data || error.message}`);
+    throw new Error(error.response?.data || `Failed to fetch master coupons.`);
+  }
+}
