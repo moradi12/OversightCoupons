@@ -15,6 +15,20 @@ interface MasterCoupon {
       discountType: "Percentage",
       discountValue: 50,
     },
+    
+    {
+      code: "SUMMER20", // Summer promotion 20% off
+      discountType: "Percentage",
+      discountValue: 20,
+    },
+    {
+      code: "WELCOME10", // Welcome discount
+      discountType: "Amount",
+      discountValue: 10,
+    },
+
+
+
   ];
   
 

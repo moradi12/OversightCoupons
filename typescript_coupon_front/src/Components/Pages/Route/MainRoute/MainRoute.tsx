@@ -5,6 +5,7 @@ import AddCoupon from "../../AddCoupon/AddCoupon";
 import AddCustomer from "../../AddCustomer/AddCustomer";
 import AllCoupons from "../../AllCoupons/AllCoupons";
 import AllCustomers from "../../AllCustomers/AllCustomers";
+import DiscountCouponComponent from "../../DiscountCouponComponent/DiscountCouponComponent";
 import Login from "../../Login/Login";
 import MasterCouponComponent from "../../Master/MasterCouponComponent";
 import { Page404 } from "../../Page404/Page404";
@@ -21,7 +22,7 @@ export function MainRoute(): JSX.Element {
           <Route path="/master" element={<MasterCouponComponent />} />
           <Route path="/admin/coupon/add" element={<AddCoupon couponToEdit={null} />}/>
           <Route path="/admin/reports" element={<ReportsPage />} />
-          
+          <Route path="/discount/"element={<DiscountCouponComponent />} />
         </Route>
 
         {/* Public Routes */}
