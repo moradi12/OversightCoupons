@@ -123,7 +123,7 @@ const ApplyCoupon: React.FC<ApplyCouponProps> = ({
       <div className="mt-4">
         <p>
           Original Price:{" "}
-          <span className="font-bold">${orderTotal.toFixed(2)}</span>
+          <span className="font-bold">${coupon.price.toFixed(2)}</span>
         </p>
         {discountAmount !== null && (
           <>
