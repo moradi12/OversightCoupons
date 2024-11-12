@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Coupon } from "../../Models/Coupon";
+import ExportCouponsToExcel from "./ExportCouponsToExcel";
 import { Report } from "./Report";
 import "./ReportsPage.css";
 
@@ -16,6 +17,7 @@ const ReportsPage: React.FC = () => {
       setCoupons(parsedCoupons);
     }
   }, []);
+
   // Generate a summary report of all coupons
   const generateSummary = () => {
     if (coupons.length > 0) {
@@ -23,6 +25,7 @@ const ReportsPage: React.FC = () => {
       setReport(reportInstance.generateSummary());
     }
   };
+
   // Filter coupons within a specific date range
   const handleDateRangeFilter = () => {
     if (coupons.length > 0 && startDate && endDate) {
@@ -31,9 +34,12 @@ const ReportsPage: React.FC = () => {
         new Date(startDate),
         new Date(endDate)
       );
-      setReport(`Coupons in Date Range:\n${JSON.stringify(filteredCoupons, null, 2)}`);
+      setReport(
+        `Coupons in Date Range:\n${JSON.stringify(filteredCoupons, null, 2)}`
+      );
     }
   };
+
   // Get and display expired coupons
   const handleExpiredCoupons = () => {
     if (coupons.length > 0) {
@@ -67,6 +73,11 @@ const ReportsPage: React.FC = () => {
       <div>
         <h4>Expired Coupons</h4>
         <button onClick={handleExpiredCoupons}>Show Expired Coupons</button>
+      </div>
+
+      <div>
+        <h4>Export Coupons</h4>
+        <ExportCouponsToExcel coupons={coupons} />
       </div>
 
       <pre>{report}</pre>
