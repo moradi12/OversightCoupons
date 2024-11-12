@@ -51,10 +51,6 @@ export function Menu(): JSX.Element {
         Coupon List
       </Button>
 
-      <Button component={NavLink} to="/reports/" sx={buttonStyle}>
-        Reports
-      </Button>
-
       {/* Admin-Only Menu Items */}
       {isAdmin && (
         <>
@@ -66,6 +62,9 @@ export function Menu(): JSX.Element {
           </Button>
           <Button component={NavLink} to="/master" sx={buttonStyle}>
             Generated Master
+          </Button>
+          <Button component={NavLink} to="/reports/" sx={buttonStyle}>
+            Reports
           </Button>
         </>
       )}
