@@ -27,10 +27,11 @@ class MasterCouponManager {
   applyCoupon(
     inputCode: string,
     orderTotal: number
-  ): { discountedPrice: number; discountAmount: number } {
+  ): { discountedPrice: number; discountAmount: number; isValid: boolean } {
     const coupon = this.masterCoupons.find((c) => c.code === inputCode);
     if (!coupon) {
-      throw new Error("Invalid master coupon code.");
+      // Return without applying a discount
+      return { discountedPrice: orderTotal, discountAmount: 0, isValid: false };
     }
 
     const discount =
@@ -39,7 +40,7 @@ class MasterCouponManager {
         : (coupon.discountValue / 100) * orderTotal;
 
     const discountedPrice = Math.max(orderTotal - discount, 0); // Prevent negative totals
-    return { discountedPrice, discountAmount: discount };
+    return { discountedPrice, discountAmount: discount, isValid: true };
   }
 
   // Generate a new unique master coupon

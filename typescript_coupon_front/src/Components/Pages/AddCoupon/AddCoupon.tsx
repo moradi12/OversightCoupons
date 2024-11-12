@@ -35,7 +35,12 @@ const AddCoupon = ({ couponToEdit }: { couponToEdit: Coupon | null }) => {
     try {
       couponToEdit
         ? changeCoupon(couponToEdit, savedCoupons, newCoupon, setSavedCoupons)
-        : addCoupon(newCoupon, savedCoupons, setSavedCoupons, setNewCoupon);
+        : addCoupon(
+            newCoupon,
+            savedCoupons,
+            setSavedCoupons,
+            setNewCoupon
+          );
     } catch (error) {
       console.error("Failed to save coupon:", error);
       notify.error("Failed to save coupon. Please try again");

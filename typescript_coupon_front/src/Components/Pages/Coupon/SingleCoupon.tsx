@@ -1,10 +1,11 @@
+// SingleCoupon.tsx
 import { useEffect, useState } from "react";
 import { Coupon } from "../../Models/Coupon";
 import { handleCouponPurchase } from "../../Utils/CouponActions";
 import { getCouponsFromLocalStorage } from "../../Utils/LocalStorageUtils";
 import { notify } from "../../Utils/notif";
 import AddCoupon from "../AddCoupon/AddCoupon";
-import ApplyCoupon from "../ApplyCoupon/ApplyCoupon"; // Import ApplyCoupon
+import ApplyCoupon from "../ApplyCoupon/ApplyCoupon";
 import { DeleteCoupon } from "../DeleteCoupon/DeleteCoupon";
 import CouponDetails from "./CouponDetails";
 
@@ -36,6 +37,7 @@ const SingleCoupon = ({
         await handleCouponPurchase(coupon, savedCoupons, setSavedCoupons);
         notify.success("Coupon purchased successfully!");
 
+        // Mark the coupon as purchased
         setPurchased(true);
       } else {
         notify.error("Coupon is out of stock or not available!");
@@ -49,34 +51,46 @@ const SingleCoupon = ({
     }
   };
 
+  // Reset orderTotal when coupon changes or when coupons are updated
+  useEffect(() => {
+    setOrderTotal(coupon.price);
+    setAppliedCouponCodes([]); // Optionally reset applied coupons
+  }, [coupon, savedCoupons]);
+
   return (
     <li key={coupon.id} className="coupon-item">
-      {/* Coupon Details Component */}
+      {/* Coupon Details */}
       <CouponDetails coupon={coupon} isAdmin={isAdmin} />
 
-      {/* Delete Coupon button - Admin only */}
-      {isAdmin && (
-        <DeleteCoupon
-          couponId={coupon.id}
-          savedCoupons={savedCoupons}
-          setSavedCoupons={setSavedCoupons}
-        />
-      )}
-
-      {/* Edit Coupon button - Admin only */}
+      {/* Admin-only Actions */}
       {isAdmin && (
         <>
-          <button onClick={() => setIsEdit(true)}>Edit</button>
+          <DeleteCoupon
+            couponId={coupon.id}
+            savedCoupons={savedCoupons}
+            setSavedCoupons={setSavedCoupons}
+          />
+          <button
+            onClick={() => setIsEdit(true)}
+            className="bg-gray-500 text-white py-2 px-4 rounded hover:bg-gray-600 mt-2"
+          >
+            Edit
+          </button>
           {isEdit && (
-            <div>
+            <div className="mt-2">
               <AddCoupon couponToEdit={coupon} />
-              <button onClick={() => setIsEdit(false)}>Cancel</button>
+              <button
+                onClick={() => setIsEdit(false)}
+                className="bg-red-500 text-white py-1 px-3 rounded hover:bg-red-600"
+              >
+                Cancel
+              </button>
             </div>
           )}
         </>
       )}
 
-      {/* Buy Coupon button */}
+      {/* Buy Coupon Button */}
       <button
         className="bg-green-500 text-white font-bold py-2 px-4 rounded hover:bg-green-600 mt-2"
         onClick={handleBuyCoupon}
@@ -84,38 +98,39 @@ const SingleCoupon = ({
         Buy Coupon
       </button>
 
-      {isAdmin ? (
-        <div className="mt-4">
-          <strong>Coupon Code:</strong> {coupon.code}
-        </div>
-      ) : (
-        <div>
-          {purchased ? (
-            <div className="mt-4 text-green-700">
-              <strong>Coupon Code:</strong> {coupon.code}
-            </div>
-          ) : (
-            <div className="mt-4 text-red-700">
-              You need to buy this coupon to get the code.
-            </div>
-          )}
-          <div className="mt-2">
-            {/* Redeem Coupon Button */}
-            <button onClick={() => setRedeem(!redeem)}>
-              {redeem ? "Close Redeem" : "Redeem Coupon"}
-            </button>
+      {/* Redeem Section for All Users */}
+      <div className="mt-4">
+        {isAdmin || purchased ? (
+          <div className="text-green-700">
+            <strong>Coupon Code:</strong> {coupon.code}
           </div>
-          {redeem && (
-            <ApplyCoupon
-              coupon={coupon} 
-              orderTotal={orderTotal}
-              onApplyCoupon={setOrderTotal} 
-              appliedCouponCodes={appliedCouponCodes} 
-              setAppliedCouponCodes={setAppliedCouponCodes} 
-            />
-          )}
+        ) : (
+          <div className="text-red-700">
+            You need to buy this coupon to get the code.
+          </div>
+        )}
+
+        <div className="mt-2">
+          {/* Redeem Coupon Button */}
+          <button
+            onClick={() => setRedeem(!redeem)}
+            className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
+          >
+            {redeem ? "Close Redeem" : "Redeem Coupon"}
+          </button>
         </div>
-      )}
+
+        {/* Apply Coupon Component */}
+        {redeem && (
+          <ApplyCoupon
+            coupon={coupon}
+            orderTotal={orderTotal}
+            onApplyCoupon={setOrderTotal}
+            appliedCouponCodes={appliedCouponCodes}
+            setAppliedCouponCodes={setAppliedCouponCodes}
+          />
+        )}
+      </div>
     </li>
   );
 };
