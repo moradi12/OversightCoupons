@@ -37,8 +37,6 @@ const CouponDetails: React.FC<CouponDetailsProps> = ({ coupon, isAdmin }) => {
         <div>End Date: {new Date(coupon.endDate).toLocaleDateString()}</div>
       )}
 
-      {/* Removed the coupon code from here */}
-
       <div>Is Combinable: {coupon.isCombinable ? "Yes" : "No"}</div>
       <div>Max Usage: {coupon.maxUsage}</div>
       <div>Current Usage: {coupon.currentUsage}</div>

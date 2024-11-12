@@ -28,7 +28,6 @@ const ApplyCoupon: React.FC<ApplyCouponProps> = ({ coupon, orderTotal, onApplyCo
     return 0;
   }
 
-  // Function to handle coupon application
   function handleApplyCoupon() {
     let discountAmount = 0;
 
