@@ -33,14 +33,10 @@ const AddCoupon = ({ couponToEdit }: { couponToEdit: Coupon | null }) => {
     if (!validateCoupon(newCoupon)) return;
 
     try {
+      console.log(newCoupon);
       couponToEdit
         ? changeCoupon(couponToEdit, savedCoupons, newCoupon, setSavedCoupons)
-        : addCoupon(
-            newCoupon,
-            savedCoupons,
-            setSavedCoupons,
-            setNewCoupon
-          );
+        : addCoupon(newCoupon, savedCoupons, setSavedCoupons, setNewCoupon);
     } catch (error) {
       console.error("Failed to save coupon:", error);
       notify.error("Failed to save coupon. Please try again");
@@ -119,10 +115,14 @@ const AddCoupon = ({ couponToEdit }: { couponToEdit: Coupon | null }) => {
         <input
           type="number"
           placeholder="Enter the price"
-          value={newCoupon.price}
-          onChange={(e) =>
-            setNewCoupon({ ...newCoupon, price: parseFloat(e.target.value) })
-          }
+          value={newCoupon.price || 0}
+          onChange={(e) => {
+            const value = e.target.value;
+            setNewCoupon({
+              ...newCoupon,
+              price: value ? parseFloat(value) : 0,
+            });
+          }}
           className="input-field"
         />
         {/* Amount */}
@@ -164,7 +164,6 @@ const AddCoupon = ({ couponToEdit }: { couponToEdit: Coupon | null }) => {
           className="input-field"
         />
         Is Available
-        <label className="input-label">Is Available</label>
         <input
           type="checkbox"
           checked={newCoupon.isAvailable}

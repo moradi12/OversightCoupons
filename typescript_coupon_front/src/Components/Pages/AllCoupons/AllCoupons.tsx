@@ -51,7 +51,7 @@ const AllCoupons: React.FC = () => {
               coupon={coupon}
               savedCoupons={coupons}
               setSavedCoupons={setCoupons}
-              isAdmin={isAdmin} // Only admin can see certain fields
+              isAdmin={isAdmin} // Only admin can see certain fields!!
             />
           ))}
         </ul>

@@ -1,11 +1,8 @@
-// ApplyCoupon.tsx
 import React, { useState } from "react";
 import { Coupon } from "../../Models/Coupon";
 import { CouponUtils } from "../../Utils/CouponUtils";
 import { notify } from "../../Utils/notif";
 import MasterCouponManager from "../Master/MasterCouponManager";
-
-//TOfix 
 
 interface ApplyCouponProps {
   coupon: Coupon;
@@ -38,7 +35,7 @@ const ApplyCoupon: React.FC<ApplyCouponProps> = ({
       return;
     }
 
-    // Attempt to apply Master Coupon first
+    // Attempt to apply Master Coupon
     const masterResult = MasterCouponManager.applyCoupon(inputCode, orderTotal);
     if (masterResult.isValid) {
       const { discountedPrice, discountAmount } = masterResult;

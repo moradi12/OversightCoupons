@@ -20,7 +20,7 @@ export class Coupon {
   endDate?: Date;
   image?: any;
   isAvailable: boolean;
-  category?: any; // Use specific type if available
+  category?: any;
   isMasterCoupon: boolean;
 
   constructor({
@@ -61,7 +61,7 @@ export class Coupon {
     code?: string;
     maxUsage: number;
     currentUsage?: number;
-    category?: any; // Use specific type if available
+    category?: any; 
     isMasterCoupon?: boolean;
   }) {
     this.title = title;

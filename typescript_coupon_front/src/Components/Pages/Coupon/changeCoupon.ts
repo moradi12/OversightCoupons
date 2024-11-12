@@ -9,7 +9,7 @@ export const changeCoupon = (
 ) => {
   const couponsAfterUpdate = savedCoupons.map((coupon) =>
     coupon.id === couponToEdit?.id
-      ? { ...newCoupon, code: coupon.code, creationDate: coupon.creationDate } // Preserve code and creationDate
+      ? { ...newCoupon, code: coupon.code, creationDate: coupon.creationDate } // Preserve code and creationDate!!
       : coupon
   );
   setSavedCoupons(couponsAfterUpdate);

@@ -28,7 +28,7 @@ class MasterCouponManager {
     inputCode: string,
     orderTotal: number
   ): { discountedPrice: number; discountAmount: number; isValid: boolean } {
-    const coupon = this.masterCoupons.find((c) => c.code === inputCode);
+    const coupon = this.masterCoupons.find((c) => c.code === inputCode.trim());
     if (!coupon) {
       // Return without applying a discount
       return { discountedPrice: orderTotal, discountAmount: 0, isValid: false };
