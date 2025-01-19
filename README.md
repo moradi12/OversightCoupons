@@ -1,138 +1,133 @@
-# 🍲 Recipe Book  
+OversightCoupons Frontend
 
-**Recipe Book** is a dynamic web application that helps users explore and manage a variety of recipes. Built using a **TypeScript frontend** and a **Java Spring Boot backend**, it offers a modern and efficient way to discover, organize, and share culinary inspiration.  
+OversightCoupons is a modern coupon management platform built with React and TypeScript, designed to streamline the process of managing coupons. This project features a clean UI and responsive design with Tailwind CSS, allowing administrators to create, manage, and organize coupons effectively.
 
----
+OversightCoupons is a robust and dynamic coupon management system built using React and TypeScript. This project features a modular architecture and focuses on providing an intuitive user experience for managing coupons, offering functionality for creating, viewing, and reporting on coupons.
+Features
 
-## 📚 Table of Contents  
-- ✨ [Features](#features)  
-- 💻 [Technology Stack](#technology-stack)  
-- ⚙️ [Installation](#installation)  
-  - 🔧 Backend Setup  
-  - 🔅️ Frontend Setup  
-- 🚀 [Usage](#usage)  
-- 🤝 [Contributing](#contributing)  
-- 📜 [License](#license)  
+    Coupon Management: Add, view, and manage coupons dynamically.
+    Reusable Components: Modular React components for flexibility and maintainability.
+    TypeScript Support: Strongly-typed codebase for reliability.
+    API Integration: Axios-based utilities for seamless backend interaction.
+    Notifications: Integrated real-time feedback using the Notyf library.
 
----
+    Admin Management:
+        Add, view, edit, and delete coupons.
+        Secure admin-only operations.
+    Reports and Export:
+        Generate coupon reports and export data to Excel.
+    Dynamic UI:
+        Responsive and styled using Tailwind CSS.
+    Utilities:
+        Real-time notifications with Notyf.
+        Local storage management for session data.
+    TypeScript Safety:
+        Type-safe codebase to reduce errors and improve maintainability.
 
-## ✨ Features  
+Technologies Used
 
-- 📝 **Recipe Management**: Create, update, and delete recipes.  
-- 🔍 **Search and Filter**: Find recipes based on ingredients, name, or category.  
-- 🔒 **User Authentication**: Secure login and registration system with JWT-based authentication.  
-- 📦 **Redux State Management**: Efficient state handling using Redux slices.  
-- 🚪 **Protected Routes**: Secure API calls with token refresh support via `axios-jwt`.  
-- 📱 **Responsive Design**: Fully optimized for desktop and mobile devices.  
-- 🌐 **API Integration**: Robust backend API for seamless data interaction.  
-- 🦡 **Custom Hooks**: Clean and modularized React components.  
-- 🎨 **Smooth Animations**: Enhances user experience with transitions and effects.  
+    React (Frontend framework)
+    TypeScript (Type-safe JavaScript)
+    Tailwind CSS (Utility-first styling)
+    Axios (API communication)
+    Notyf (User notifications)
 
----
+    React: Frontend framework for creating dynamic components.
+    TypeScript: Adds type safety to JavaScript.
+    Redux: State management for application data.
+    Axios: API calls for seamless backend interaction.
+    Notyf: Notification system for user feedback.
 
-## 💻 Technology Stack  
+Project Structure
 
-### Backend  
-- 🔄 **Language**: Java  
-- ⚡ **Framework**: Spring Boot  
-- 💄 **Database**: MySQL/PostgreSQL (configurable)  
-- 🛠️ **Tools**: Maven, Hibernate, Spring Data JPA  
-- 🔐 **Authentication**: JSON Web Tokens (JWT)  
+typescript_coupon_front/
+├── src/
+│   ├── Components/
+│   │   ├── Models/
+│   │   │   ├── Category.ts    # Defines coupon categories
+│   │   │   ├── Coupon.ts      # Represents coupon data structure
+│   │   ├── AddCoupon/         # Component for adding coupons
+│   │   ├── CouponList/        # Component for displaying coupon list
+│   │   ├── utils/
+│   │       ├── apiFunction.ts # Handles API requests
+│   │       ├── notif.ts       # Provides notification utilities
+│   ├── App.tsx
+│   ├── index.tsx
 
-### Frontend  
-- 🔄 **Language**: TypeScript  
-- ⚡ **Framework**: React with Vite for fast development  
-- 🎨 **Styling**: Tailwind CSS  
+typescript_coupon_front/
+├── index.css                   # Global styles for the application
+├── index.tsx                   # Main entry point for the React app
+├── Components/
+│   ├── Layout/
+│   │   ├── Footer/             # Footer component and styles
+│   │   ├── Header/             # Header component and styles
+│   │   ├── Menu/               # Menu component for navigation
+│   │   ├── MainLayout/         # Central layout component
+│   ├── Models/
+│   │   ├── Coupon.ts           # Defines coupon data structure
+│   │   ├── UserDetails.ts      # Model for user information
+│   ├── Pages/
+│   │   ├── AddCoupon/          # AddCoupon component
+│   │   ├── AllCoupons/         # Displays a list of all coupons
+│   │   ├── Reports/            # Export and view coupon reports
+│   │   ├── Login/              # Login page for admins
+│   ├── Utils/
+│       ├── notif.ts            # Notification utility
+│       ├── LocalStorageService.ts  # Manages local storage
+├── Redux/
+│   ├── CouponSlice.ts          # Redux slice for managing coupon state
+│   ├── store.ts                # Main Redux store
 
-#### Additional Tools and Libraries  
-- 📡 **Axios**: Handles API requests.  
-- 🔒 **AxiosJWT**: Manages authenticated requests with automatic token refresh.  
-- 📦 **Redux Toolkit**: State management with modular slices.  
-- 🌐 **React Router**: Navigation and route protection.  
-- 🦡 **React Hook Form**: Efficient form handling.  
-- 💫 **Framer Motion**: Smooth animations and user interactions.  
-- 🔔 **Notyf**: User notifications and feedback.  
-- 🎠 **Slick Carousel**: Stylish carousels and sliders.  
-- 🎨 **React Icons**: Lightweight and customizable icons.  
+Getting Started
+Prerequisites
 
----
+Ensure you have the following installed:
 
-## ⚙️ Installation  
+    Node.js (v16 or higher)
+    npm (v7 or higher)
+    Node.js: Version 16 or higher
+    npm: Version 7 or higher
 
-### 🔧 Backend Setup  
+Installation
 
-1. Clone the repository:  
-   ```bash
-   git clone https://github.com/moradi12/AllrecipesV2.git
-   cd AllrecipesV2/Recipesdemo
-   ```
-2. Configure the database:  
-   - Update the `application.properties` or `application.yml` file with your database credentials.  
+    Clone the repository:
 
-3. Build and run the backend:  
-   ```bash
-   mvn spring-boot:run
-   ```
-4. Verify the backend is running at [http://localhost:8080](http://localhost:8080).  
+    git clone https://github.com/moradi12/OversightCoupons.git
+    cd OversightCoupons/typescript_coupon_front
 
----
+Install dependencies:
 
-### 🔅️ Frontend Setup  
+npm install
 
-1. Navigate to the frontend directory:  
-   ```bash
-   cd AllrecipesV2/my-react-app
-   ```
-2. Install dependencies:  
-   ```bash
-   npm install
-   ```
-3. Start the frontend:  
-   ```bash
-   npm run dev
-   ```
-4. Access the application at [http://localhost:3000](http://localhost:3000).  
+Start the development server:
 
----
+npm run dev
 
-## 🚀 Usage  
+    Open your browser at http://localhost:5173.
 
-- 🔒 **Register or log in** to the application.  
-- 🔍 **Search for recipes** using filters for ingredients, categories, or preparation time.  
-- 📝 **Add, edit, or delete recipes** seamlessly.  
-- 🛡️ **Enjoy secure sessions** with JWT authentication.  
-- 📦 **Efficiently manage state** using Redux slices.  
-- 💫 **Experience smooth animations** with Framer Motion.  
+Usage
+Admin Login
 
----
+    Email: admin@admin.com
 
-## 🤝 Contributing  
+Features Overview
 
-We welcome contributions!  
+    Add new coupons with details like name, description, category, price, and more.
+    View and manage coupons dynamically from the admin panel.
+    Receive real-time feedback through notifications.
 
-1. Fork the repository.  
-2. Create a new branch:  
-   ```bash
-   git checkout -b feature/your-feature-name
-   ```
-3. Commit your changes:  
-   ```bash
-   git commit -m "Add your feature description"
-   ```
-4. Push to your branch:  
-   ```bash
-   git push origin feature/your-feature-name
-   ```
-5. Open a pull request.  
+Contributing
 
----
+Contributions are welcome! Feel free to fork this repository, make improvements, and submit a pull request.
 
-## 📜 License  
+    Admin Login:
+        Email: admin@admin.com
+    Features:
+        Add, edit, and delete coupons.
+        Export coupon data and view reports.
 
-This project is licensed under the **MIT License**.  
+License
 
----  
+This project is licensed under the MIT License.
 
-🎉 **Happy Cooking!**  
-For questions or feedback, feel free to open an issue or send me a message.
----
+Happy coding! 🚀
