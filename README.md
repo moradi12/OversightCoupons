@@ -134,6 +134,5 @@ This project is licensed under the **MIT License**.
 ---  
 
 🎉 **Happy Cooking!**  
-For questions or feedback, feel free to open an issue or contact the repository maintainer.  
-
+For questions or feedback, feel free to open an issue or send me a message.
 ---
