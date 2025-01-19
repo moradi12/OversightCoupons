@@ -1,133 +1,108 @@
-OversightCoupons Frontend
 
-OversightCoupons is a modern coupon management platform built with React and TypeScript, designed to streamline the process of managing coupons. This project features a clean UI and responsive design with Tailwind CSS, allowing administrators to create, manage, and organize coupons effectively.
+# OversightCoupons Frontend
 
-OversightCoupons is a robust and dynamic coupon management system built using React and TypeScript. This project features a modular architecture and focuses on providing an intuitive user experience for managing coupons, offering functionality for creating, viewing, and reporting on coupons.
-Features
+OversightCoupons is a modern, React and TypeScript-based coupon management platform. With a clean UI powered by Tailwind CSS, it allows administrators to efficiently create, manage, and organize coupons, providing a seamless user experience.
 
-    Coupon Management: Add, view, and manage coupons dynamically.
-    Reusable Components: Modular React components for flexibility and maintainability.
-    TypeScript Support: Strongly-typed codebase for reliability.
-    API Integration: Axios-based utilities for seamless backend interaction.
-    Notifications: Integrated real-time feedback using the Notyf library.
+---
 
-    Admin Management:
-        Add, view, edit, and delete coupons.
-        Secure admin-only operations.
-    Reports and Export:
-        Generate coupon reports and export data to Excel.
-    Dynamic UI:
-        Responsive and styled using Tailwind CSS.
-    Utilities:
-        Real-time notifications with Notyf.
-        Local storage management for session data.
-    TypeScript Safety:
-        Type-safe codebase to reduce errors and improve maintainability.
+## Features
 
-Technologies Used
+### Coupon Management
+- Add, view, edit, and delete coupons dynamically.
+- Generate coupon reports and export data to Excel.
 
-    React (Frontend framework)
-    TypeScript (Type-safe JavaScript)
-    Tailwind CSS (Utility-first styling)
-    Axios (API communication)
-    Notyf (User notifications)
+### Admin Management
+- Secure admin-only operations.
+- Real-time notifications with **Notyf**.
 
-    React: Frontend framework for creating dynamic components.
-    TypeScript: Adds type safety to JavaScript.
-    Redux: State management for application data.
-    Axios: API calls for seamless backend interaction.
-    Notyf: Notification system for user feedback.
+### Utilities & Integration
+- **TypeScript**: Strongly-typed codebase for reliability.
+- **Axios**: API integration for seamless backend communication.
+- **Redux**: Manage state efficiently.
 
-Project Structure
+### Dynamic UI
+- Responsive and modular design with **Tailwind CSS**.
+- Reusable components for flexibility and maintainability.
 
+---
+
+## Technologies Used
+- **React**: Frontend framework for dynamic components.
+- **TypeScript**: Adds type safety to JavaScript.
+- **Tailwind CSS**: Utility-first styling.
+- **Axios**: Handles API calls.
+- **Notyf**: Provides user feedback notifications.
+- **Redux**: State management.
+
+---
+
+## Project Structure
+
+```
 typescript_coupon_front/
 ├── src/
 │   ├── Components/
 │   │   ├── Models/
-│   │   │   ├── Category.ts    # Defines coupon categories
-│   │   │   ├── Coupon.ts      # Represents coupon data structure
-│   │   ├── AddCoupon/         # Component for adding coupons
-│   │   ├── CouponList/        # Component for displaying coupon list
-│   │   ├── utils/
-│   │       ├── apiFunction.ts # Handles API requests
-│   │       ├── notif.ts       # Provides notification utilities
+│   │   │   ├── Category.ts       # Coupon categories
+│   │   │   ├── Coupon.ts         # Coupon data structure
+│   │   ├── AddCoupon/            # AddCoupon component
+│   │   ├── CouponList/           # Display list of coupons
+│   ├── Utils/
+│   │   ├── apiFunction.ts        # API utilities
+│   │   ├── notif.ts              # Notification utilities
+│   ├── Redux/
+│       ├── CouponSlice.ts        # Coupon state management
+│       ├── store.ts              # Redux store setup
 │   ├── App.tsx
 │   ├── index.tsx
+```
 
-typescript_coupon_front/
-├── index.css                   # Global styles for the application
-├── index.tsx                   # Main entry point for the React app
-├── Components/
-│   ├── Layout/
-│   │   ├── Footer/             # Footer component and styles
-│   │   ├── Header/             # Header component and styles
-│   │   ├── Menu/               # Menu component for navigation
-│   │   ├── MainLayout/         # Central layout component
-│   ├── Models/
-│   │   ├── Coupon.ts           # Defines coupon data structure
-│   │   ├── UserDetails.ts      # Model for user information
-│   ├── Pages/
-│   │   ├── AddCoupon/          # AddCoupon component
-│   │   ├── AllCoupons/         # Displays a list of all coupons
-│   │   ├── Reports/            # Export and view coupon reports
-│   │   ├── Login/              # Login page for admins
-│   ├── Utils/
-│       ├── notif.ts            # Notification utility
-│       ├── LocalStorageService.ts  # Manages local storage
-├── Redux/
-│   ├── CouponSlice.ts          # Redux slice for managing coupon state
-│   ├── store.ts                # Main Redux store
+---
 
-Getting Started
-Prerequisites
+## Getting Started
 
-Ensure you have the following installed:
+### Prerequisites
+- **Node.js**: v16 or higher
+- **npm**: v7 or higher
 
-    Node.js (v16 or higher)
-    npm (v7 or higher)
-    Node.js: Version 16 or higher
-    npm: Version 7 or higher
+### Installation
 
-Installation
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/moradi12/OversightCoupons.git
+   cd OversightCoupons/typescript_coupon_front
+   ```
 
-    Clone the repository:
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
 
-    git clone https://github.com/moradi12/OversightCoupons.git
-    cd OversightCoupons/typescript_coupon_front
+3. Start the development server:
+   ```bash
+   npm run dev
+   ```
 
-Install dependencies:
+4. Open your browser at [http://localhost:5173](http://localhost:5173).
 
-npm install
+---
 
-Start the development server:
+## Admin Login
 
-npm run dev
+- **Email**: admin@admin.com
 
-    Open your browser at http://localhost:5173.
+---
 
-Usage
-Admin Login
+## Contributing
 
-    Email: admin@admin.com
+Contributions are welcome! Fork this repository, make your improvements, and submit a pull request.
 
-Features Overview
+---
 
-    Add new coupons with details like name, description, category, price, and more.
-    View and manage coupons dynamically from the admin panel.
-    Receive real-time feedback through notifications.
+## License
 
-Contributing
+This project is licensed under the [MIT License](https://opensource.org/licenses/MIT).
 
-Contributions are welcome! Feel free to fork this repository, make improvements, and submit a pull request.
-
-    Admin Login:
-        Email: admin@admin.com
-    Features:
-        Add, edit, and delete coupons.
-        Export coupon data and view reports.
-
-License
-
-This project is licensed under the MIT License.
+---
 
 Happy coding! 🚀
